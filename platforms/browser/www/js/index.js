@@ -1,5 +1,45 @@
+
+function takePhoto() {
+    navigator.camera.getPicture(onCameraSuccess, onCameraError, {
+        quality: 50,
+        destinationType: Camera.DestinationType.FILE_URI,
+    })
+}
+
+function onCameraSuccess(imageURI) {
+    alert('sucess');
+    var img = document.getElementById('smallImage');
+    img.src = imageURI;
+}
+
+function onCameraError(message) {
+    alert(message);
+}
+
 $(document).ready(function () {
 
+    $("#takepicture").on('click', () => {
+        takePhoto();
+    })
+    
+
+    // function takePhoto() {
+    //     navigator.camera.getPicture(onCameraSuccess, onCameraError, {
+    //         quality: 50,
+    //         destinationType: Camera.DestinationType.FILE_URI,
+    //     })
+    // }
+
+    // function onCameraSuccess(imageURI){
+    //     var img = document.getElementById('smallImage');
+    //     img.src= imageURI;
+    // }
+
+    // function onCameraError(message){
+    //     console.log(message);
+    // }
+
+    
     //star rating jquery
     /* 1. Visualizing things on Hover - See next part for action on click */
     $('#prices li').on('mouseover', function () {
@@ -115,10 +155,6 @@ $(document).ready(function () {
     //     console.log('ye');
     // })
 
+
 });
 
-
-function responseMessage(msg) {
-    $('.success-box').fadeIn(200);
-    $('.success-box div.text-message').html("<span>" + msg + "</span>");
-}

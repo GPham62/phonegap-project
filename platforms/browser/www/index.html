@@ -5,50 +5,103 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>I - Rate</title>
-    
-    <link rel="stylesheet" href="css/index.css" />
     <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
-    <link rel="stylesheet" href="css/jquery.mobile.icons-1.4.5.min.css">
     <link rel="stylesheet" href="css/jquery.mobile.structure-1.4.5.min.css">
     <link rel="stylesheet" href="css/jquery.mobile.theme-1.4.5.min.css">
     <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="css/style.css" />
     <script src="js/jquery-1.8.3.min.js"></script>
     <script src="js/jquery.validate.min.js"></script>
     <script src="js/jquery.mobile-1.4.5.min.js"></script>
-
-    <script src="js/index.js"></script>
-
+    <script src="js/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    
 </head>
 
 <body>
-    <!-- <div data-role="page" id="list">
+    <div data-role="page" id="list">
         <div data-role="header" data-theme="a">
             <h1><img src="img/logo.png" alt="i-rate mobile" width="30" height="30"
-                style="padding-right: 0.5em; vertical-align: middle;" />Restaurant List</h1>
+                    style="padding-right: 0.5em; vertical-align: middle;" />Restaurant List</h1>
         </div>
 
         <div data-role="content">
-            
+            <div data-role="fieldcontain" class="ui-grid-c">
+                <div class="ui-block-a" style="width: 30%">
+                    <a data-theme="d" data-corners="false" data-role="button" data-transition="flip" href="#review">
+                        <img src="img/good-review.png" alt="rss" width="32" height="32"
+                            style="display: block; margin: 0 auto">
+                        Review
+                    </a>
+                </div>
+                <div class="ui-block-b" style="width: 20%"></div>
+                <div class="ui-block-c" style="width: 50%">
+                    <input type="search" name="search-restaurant" id="search-restaurant" value=""
+                        placeholder="Search..." />
+                </div>
+            </div>
+
+            <div data-role="fieldcontain">
+                <ul data-role="listview" data-split-theme="a" data-split-icon="arrow-r" data-inset="true">
+                    <!-- restaurant 1-->
+                    <li data-theme="c">
+                        <a href="#info" data-transition="slide">
+                            <img src="img/restaurant1.png">
+                            <h2>Restaurant 1</h2>
+                            <p>Rating: <i class='fas fa-star'>5</i></p>
+                        </a>
+                        <a href="#info" data-transition="slide"></a>
+                    </li>
+
+                    <li data-theme="c">
+                        <a href="#info" data-transition="slide">
+                            <img src="img/restaurant1.png">
+                            <h2>Restaurant 2</h2>
+                            <p>Rating: <i class='fas fa-star'>5</i></p>
+                        </a>
+                        <a href="#info" data-transition="slide"></a>
+                    </li>
+
+                    <li data-theme="c">
+                        <a href="#info" data-transition="slide">
+                            <img src="img/restaurant1.png">
+                            <h2>Restaurant 3</h2>
+                            <p>Rating: <i class='fas fa-star'>5</i></p>
+                        </a>
+                        <a href="#info" data-transition="slide"></a>
+                    </li>
+                </ul>
+            </div>
+
         </div>
-    </div> -->
+
+        <div data-role="footer" data-position="fixed">
+            <p style="text-align: center;">&copy; Copyright 2020</p>
+        </div>
+    </div>
+
     <div data-role="page" id="review">
         <div data-role="header" data-theme="a">
+            <a data-role="button" href="#list" data-icon="home" data-transition="turn" data-corners="false">Home</a>
             <h1>
-                <img src="img/logo.png" alt="i-rate mobile" width="30" height="30" style="padding-right: 0.5em; vertical-align: middle;" />
-                Restaurant Review
+                <img src="img/logo.png" alt="i-rate mobile" width="30" height="30"
+                    style="padding-right: 0.5em; vertical-align: middle;" />
+                Review
             </h1>
         </div>
 
         <div data-role="content">
             <form id="reviewForm">
+                <fieldset>
+                    <label for="photo">Take a picture:</label>
+                    <div id="takepicture" class="ui-btn ui-icon-camera ui-btn-icon-left ui-shadow ui-corner-all">Take Picture</div>
+                    <img style="width:60px;height:60px;" id="smallImage"/>
+
+                </fieldset>
                 <fieldset data-role="fieldcontain">
                     <label for="uname">Reviewer Name:</label>
                     <input type="text" name="uname" id="uname" placeholder="Your Name..." />
-                </fieldset>
-
-                <fieldset data-role="fieldcontain">
-                    <label for="rname">Restaurant Name:</label>
-                    <input type="text" name="rname" id="rname" placeholder="Restaurant Name..." />
                 </fieldset>
 
                 <fieldset data-role="fieldcontain">
@@ -64,7 +117,7 @@
                 <fieldset data-role="fieldcontain" class="ui-grid-b">
                     <div class="ui-block-a">
                         <label for="time">Time:</label>
-                        <input type="time" name="time" id="time"/>
+                        <input type="time" name="time" id="time" />
                     </div>
 
                     <div class="ui-block-b">
@@ -73,13 +126,13 @@
 
                     <div class="ui-block-b">
                         <label for="date">Date:</label>
-                        <input type="date" name="date" id="date"/>
+                        <input type="date" name="date" id="date" />
                     </div>
                 </fieldset>
 
                 <fieldset data-role="fieldcontain">
                     <label for="prices">Price:</label>
-                    
+
                     <!-- Rating Stars Box -->
                     <div class='rating-stars text-center'>
                         <ul id='prices'>
@@ -100,8 +153,9 @@
                             </li>
                         </ul>
                     </div>
-                    <input data-role="none" type="text" id="hiddenPrice" name="hiddenPrice" value="0" style="display: none;">
-                    
+                    <input data-role="none" type="text" id="hiddenPrice" name="hiddenPrice" value="0"
+                        style="display: none;">
+
                 </fieldset>
 
                 <fieldset data-role="fieldcontain">
@@ -134,26 +188,85 @@
                     </select>
                 </fieldset>
 
+                <fieldset data-role="fieldcontain">
+                    <label for="note">Add note(optional):</label>
+                    <textarea name="note" id="note" cols="30" rows="10"></textarea>
+                </fieldset>
+
                 <input data-theme="a" type="submit" id="submit" value="Submit" />
             </form>
         </div>
+
+        <div data-role="footer" data-position="fixed">
+            <p style="text-align: center;">&copy; Copyright 2020</p>
+        </div>
     </div>
 
-    <div d
-    ata-role="page" id="info" data-theme="a">
+    <div data-role="page" id="info" data-theme="a">
         <div data-role="header">
-            <h1>Restaurant Info</h1>
+            <a data-role="button" href="#list" data-icon="home" data-transition="slide" data-direction="reverse" data-corners="false">Home</a>
+            <h1>
+                <img src="img/logo.png" alt="i-rate mobile" width="30" height="30"
+                    style="padding-right: 0.5em; vertical-align: middle;" />
+                Restaurant Info
+            </h1>
         </div>
 
         <div data-role="content">
-            <img src="" alt="">
-            <table data-role="table" id="info-table" class="ui-responsive">
-                <thead>
-                    <tr>
+            <img src="img/restaurant1.png" class="info-img-cover">
+            <div class="tablerow">
+                <div class="left-table">Name:</div>
+                <div class="right-table">Via Sophia</div>
+            </div>
 
-                    </tr>
-                </thead>
-            </table>
+            <div class="tablerow">
+                <div class="left-table">Type:</div>
+                <div class="right-table">Diner</div>
+            </div>
+
+            <div class="tablerow">
+                <div class="left-table">Day Visit:</div>
+                <div class="right-table">9PM 14-11-2020</div>
+            </div>
+
+            <div class="tablerow">
+                <div class="left-table">Price:</div>
+                <div class="right-table"><i class='fa fa-dollar-sign fa-fw' style="color: #0ed41f">5</i></div>
+            </div>
+
+            <div class="tablerow">
+                <div class="left-table">Rating:</div>
+                <div class="right-table"><i class='fas fa-star'>5</i></div>
+            </div>
+
+            <div data-role="collapsible">
+                <h3>Notes</h3>
+                <label for="user1">User1</label>
+                <textarea name="user1" id="user1" cols="20" rows="5" readonly>
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
+                    aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                    occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                </textarea>
+
+                <label for="user2">User2</label>
+                <textarea name="user2" id="user2" cols="20" rows="5" readonly>
+                    "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
+                    eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam
+                    voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
+                    voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit,
+                    sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima
+                    veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis
+                    autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem
+                    eum fugiat quo voluptas nulla pariatur?"
+                </textarea>
+            </div>
+
+            <a data-role="button" href="#addnote" data-transition="pop" data-icon="edit" style="width: 150px; margin: 20px auto;">Add Note</a>
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+            <p style="text-align: center;">&copy; Copyright 2020</p>
         </div>
     </div>
 
