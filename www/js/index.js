@@ -7,8 +7,7 @@ function takePhoto() {
 }
 
 function onCameraSuccess(imageURI) {
-    alert('sucess');
-    var img = document.getElementById('smallImage');
+    var img = document.getElementById('image');
     img.src = imageURI;
 }
 
