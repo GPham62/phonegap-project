@@ -43,34 +43,8 @@
             </div>
 
             <div data-role="fieldcontain">
-                <ul data-role="listview" data-split-theme="a" data-split-icon="arrow-r" data-inset="true">
-                    <!-- restaurant 1-->
-                    <li data-theme="c">
-                        <a href="#info" data-transition="slide">
-                            <img src="img/restaurant1.png">
-                            <h2>Restaurant 1</h2>
-                            <p>Rating: <i class='fas fa-star'>5</i></p>
-                        </a>
-                        <a href="#info" data-transition="slide"></a>
-                    </li>
-
-                    <li data-theme="c">
-                        <a href="#info" data-transition="slide">
-                            <img src="img/restaurant1.png">
-                            <h2>Restaurant 2</h2>
-                            <p>Rating: <i class='fas fa-star'>5</i></p>
-                        </a>
-                        <a href="#info" data-transition="slide"></a>
-                    </li>
-
-                    <li data-theme="c">
-                        <a href="#info" data-transition="slide">
-                            <img src="img/restaurant1.png">
-                            <h2>Restaurant 3</h2>
-                            <p>Rating: <i class='fas fa-star'>5</i></p>
-                        </a>
-                        <a href="#info" data-transition="slide"></a>
-                    </li>
+                <ul id="ta-res-list" data-role="listview" data-split-theme="a" data-split-icon="arrow-r"
+                    data-inset="true">
                 </ul>
             </div>
 
@@ -94,10 +68,17 @@
         <div data-role="content">
             <form id="reviewForm">
                 <fieldset>
+<<<<<<< HEAD
                     <label for="photo">Take a picture(optional):</label>
                     <div id="takepicture" class="ui-btn ui-icon-camera ui-btn-icon-left ui-shadow ui-corner-all">Take
                         Picture</div>
                     <img style="width:80%;height:200px; margin: auto" id="image" src="img/no-image.png"/>
+=======
+                    <label for="photo">Take a picture:</label>
+                    <div id="takepicture" class="ui-btn ui-icon-camera ui-btn-icon-left ui-shadow ui-corner-all">Take
+                        Picture</div>
+                    <img style="width:60px;height:60px;" id="smallImage" />
+>>>>>>> fbc2a51e74881611104d7614931db3888475f89e
 
                 </fieldset>
                 <fieldset data-role="fieldcontain">
@@ -223,52 +204,56 @@
             <img src="img/restaurant1.png" class="info-img-cover">
             <div class="tablerow">
                 <div class="left-table">Name:</div>
-                <div class="right-table">Via Sophia</div>
+                <div class="right-table ta-info-res-name"></div>
             </div>
 
             <div class="tablerow">
                 <div class="left-table">Type:</div>
-                <div class="right-table">Diner</div>
+                <div class="right-table ta-info-res-type"></div>
             </div>
 
             <div class="tablerow">
                 <div class="left-table">Day Visit:</div>
-                <div class="right-table">9PM 14-11-2020</div>
+                <div class="right-table ta-info-res-visit">9PM 14-11-2020</div>
             </div>
 
             <div class="tablerow">
                 <div class="left-table">Price:</div>
-                <div class="right-table"><i class='fa fa-dollar-sign fa-fw' style="color: #0ed41f">5</i></div>
+                <div class="right-table ta-info-res-price"><i class='fa fa-dollar-sign fa-fw'
+                        style="color: #0ed41f">5</i></div>
             </div>
 
             <div class="tablerow">
                 <div class="left-table">Rating:</div>
-                <div class="right-table"><i class='fas fa-star'>5</i></div>
+                <div class="right-table"><i class='fas fa-star ta-info-res-rating'></i></div>
             </div>
 
             <div data-role="collapsible">
                 <h3>Notes</h3>
-                <label for="user1">User1</label>
-                <textarea name="user1" id="user1" cols="20" rows="5" readonly>
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
-                    aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                    occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                </textarea>
+                <div class="ta-note-list">
+                    <label for="user1">User1</label>
+                    <textarea name="user1" id="user1" cols="20" rows="5" readonly>
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+                        aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
+                        aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                        occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                    </textarea>
 
-                <label for="user2">User2</label>
-                <textarea name="user2" id="user2" cols="20" rows="5" readonly>
-                    "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
-                    eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam
-                    voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
-                    voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit,
-                    sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima
-                    veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis
-                    autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem
-                    eum fugiat quo voluptas nulla pariatur?"
-                </textarea>
+                    <label for="user2">User2</label>
+                    <textarea name="user2" id="user2" cols="20" rows="5" readonly>
+                        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
+                        eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam
+                        voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
+                        voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit,
+                        sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima
+                        veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis
+                        autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem
+                        eum fugiat quo voluptas nulla pariatur?"
+                    </textarea>
+                </div>
             </div>
 
+<<<<<<< HEAD
             <a data-role="button" href="#addnote" data-rel="popup" data-position-to="window" data-transition="pop"
                 data-icon="edit" style="width: 150px; margin: 20px auto;">Add Note</a>
             <div data-role="popup" id="addnote" data-overlay-theme="a" data-theme="a" data-dismissible="false"
@@ -305,6 +290,10 @@
                 </div>
 
             </div>
+=======
+            <a data-role="button" href="#addnote" data-transition="pop" data-icon="edit"
+                style="width: 150px; margin: 20px auto;">Add Note</a>
+>>>>>>> fbc2a51e74881611104d7614931db3888475f89e
         </div>
 
         <div data-role="footer" data-position="fixed">
