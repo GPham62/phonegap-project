@@ -1,27 +1,131 @@
 
+function populateDB(tx) {
+    //create users table
+    tx.executeSql('DROP TABLE IF EXISTS users');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS users (user_id integer primary key not null, name text not null)');
+    //insert user
+    tx.executeSql('INSERT INTO users (name) VALUES ("thao1")');
+    tx.executeSql('INSERT INTO users (name) VALUES ("thao2")');
+    tx.executeSql('INSERT INTO users (name) VALUES ("thao3")');
+    //create restaurants table
+    tx.executeSql('DROP TABLE IF EXISTS restaurants');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS restaurants (res_id integer primary key not null, name text not null, type text, price integer, service text, cleanliness text, quality text)');
+    //insert restaurant
+    tx.executeSql('insert into restaurants(name, type, price, service, cleanliness, quality) values ("res1", "type1", 10, "good", "good","excellent")');
+    tx.executeSql('insert into restaurants(name, type, price, service, cleanliness, quality) values ("res2", "type2", 20, "good", "good","excellent")');
+    tx.executeSql('insert into restaurants(name, type, price, service, cleanliness, quality) values ("res3", "type3", 30, "good", "good","excellent")');
+    //create note table
+    tx.executeSql('DROP TABLE IF EXISTS notes');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS notes (note_id integer primary key not null,content text not null,user_id integer not null, res_id integer not null, foreign key (user_id) references users (user_id) on update cascade on delete cascade, foreign key (res_id) references restaurants (res_id) on update cascade on delete cascade)');
+    //insert note
+    tx.executeSql('insert into notes(content, user_id, res_id) values ("excellent food", 1, 1)')
+    tx.executeSql('insert into notes(content, user_id, res_id) values ("good food", 2, 1)')
+    tx.executeSql('insert into notes(content, user_id, res_id) values ("bad food", 3, 1)')
+}
+function errorCB(tx, err) {
+    alert("Error processing SQL: " + err);
+}
+function successCB() {
+    // alert("success!");
+}
+var current_res_id;
+function loadAllRestaurants(tx) {
+    tx.executeSql('select * from restaurants', [], function (t, rs) {
+        let restaurantNum = rs.rows.length;
+        let resArray = []
+
+        for (let i = 0; i < restaurantNum; i++) {
+            let { res_id, name, service, quality, cleaniless } = rs.rows.item(i);
+            let rating = calculateRating({ service: toNumRating(service), cleaniless: toNumRating(cleaniless), quality: toNumRating(quality) })
+            resArray.push(rs.rows.item(i))
+
+            $("#ta-res-list").append(
+                '<li data-theme="c">' +
+                `<a href="#info" data-transition="slide" res-id=${res_id}>` +
+                '<img src="img/restaurant1.png">' +
+                `<h2>${name}</h2>` +
+                `<p>Rating: <i class="fas fa-star">${rating}</i></p>` +
+                '</a>' +
+                `<a class=ta-slide-btn data-transition="slide" res-id=${res_id} rating=${rating}></a>` +
+                '</li>'
+            )
+            $("#ta-res-list").listview('refresh')
+        }
+
+        $(".ta-slide-btn").on('click', function (e) {
+            let id = $(this).attr('res-id')
+            current_res_id = id
+            let rating = $(this).attr('rating')
+            let resInfo = resArray.find(res => res.res_id == id)
+            console.log(resInfo)
+            $('.ta-info-res-name').text(resInfo.name)
+            $('.ta-info-res-type').text(resInfo.type)
+            $('.ta-info-res-price').text(resInfo.price)
+            $('.ta-info-res-rating').text(rating)
+
+            window.location.href = "/#info"
+
+        })
+    })
+}
+
+function toNumRating(stringRating) {
+    if (stringRating == "Need to improve") {
+        return 1;
+    } else if (stringRating == "OKAY") {
+        return 2;
+    } else if (stringRating == "Good") {
+        return 3;
+    } else {
+        return 4;
+    }
+}
+function calculateRating({ service, cleaniless, quality }) {
+    return Math.round((service + cleaniless + quality) / 3);
+}
 function takePhoto() {
     navigator.camera.getPicture(onCameraSuccess, onCameraError, {
         quality: 50,
         destinationType: Camera.DestinationType.FILE_URI,
     })
 }
-
 function onCameraSuccess(imageURI) {
     alert('sucess');
     var img = document.getElementById('smallImage');
     img.src = imageURI;
 }
-
 function onCameraError(message) {
     alert(message);
 }
-
 $(document).ready(function () {
+    //connect database
+    var db = window.openDatabase("Database", "1.0", "Cordova Demo", 20000000);
+
+    //setup database
+    db.transaction(populateDB, errorCB, successCB);
+    //load all restaurants
+    db.transaction(loadAllRestaurants, errorCB, function (tx) {
+        db.transaction(function (tx) {
+            tx.executeSql('select * from notes where res_id = ?', [], function (tx, rs) {
+                //đây này where vào rồi vẫn select hết đhs
+                
+                // let noteNum = rs.rows.length;
+                // for(let i = 0; i < noteNum; i++){
+                //     let res = rs.rows.item(i)
+                //     if(res.id == current_res_id){
+                //         console.log(res)
+                //         break;
+                //     }
+                // }
+                console.log(rs)
+            })
+        })
+    });
 
     $("#takepicture").on('click', () => {
         takePhoto();
     })
-    
+
     //star rating jquery
     /* 1. Visualizing things on Hover - See next part for action on click */
     $('#prices li').on('mouseover', function () {
@@ -133,10 +237,6 @@ $(document).ready(function () {
         // }
     });
 
-    // $("#reviewForm").on('submit', () =>{
-    //     console.log('ye');
-    // })
-
-
 });
+
 
