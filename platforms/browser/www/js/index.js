@@ -1,11 +1,4 @@
 function populateDB(tx) {
-    //create users table
-    tx.executeSql('DROP TABLE IF EXISTS users');
-    tx.executeSql('CREATE TABLE IF NOT EXISTS users (user_id integer primary key not null, user_name text not null)');
-    //insert user
-    tx.executeSql('INSERT INTO users (user_name) VALUES ("thao1")');
-    tx.executeSql('INSERT INTO users (user_name) VALUES ("thao2")');
-    tx.executeSql('INSERT INTO users (user_name) VALUES ("thao3")');
     //create restaurants table
     tx.executeSql('DROP TABLE IF EXISTS restaurants');
     tx.executeSql('CREATE TABLE IF NOT EXISTS restaurants (res_id integer primary key not null, res_name text not null, type text, price integer, service text, cleanliness text, quality text)');
@@ -15,12 +8,12 @@ function populateDB(tx) {
     tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality) values ("res3", "type3", 30, "good", "good","excellent")');
     //create note table
     tx.executeSql('DROP TABLE IF EXISTS notes');
-    tx.executeSql('CREATE TABLE IF NOT EXISTS notes (note_id integer primary key not null,content text not null,user_id integer not null, res_id integer not null, foreign key (user_id) references users (user_id) on update cascade on delete cascade, foreign key (res_id) references restaurants (res_id) on update cascade on delete cascade)');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS notes (note_id integer primary key not null,content text not null,user_name text not null, res_id integer not null, foreign key (res_id) references restaurants (res_id) on update cascade on delete cascade)');
     //insert note
-    tx.executeSql('insert into notes(content, user_id, res_id) values ("excellent food", 1, 1)')
-    tx.executeSql('insert into notes(content, user_id, res_id) values ("good food", 2, 2)')
-    tx.executeSql('insert into notes(content, user_id, res_id) values ("bad food", 3, 1)')
-    tx.executeSql('insert into notes(content, user_id, res_id) values ("excellent food 2", 1, 2)')
+    tx.executeSql('insert into notes(content, user_name, res_id) values ("excellent food", "thao1", 1)')
+    tx.executeSql('insert into notes(content, user_name, res_id) values ("good food", "thao2", 2)')
+    tx.executeSql('insert into notes(content, user_name, res_id) values ("bad food", "thao3", 1)')
+    tx.executeSql('insert into notes(content, user_name, res_id) values ("excellent food 2", "thao3", 2)')
 }
 function errorCB(tx, err) {
     alert("Error processing SQL: " + err);
@@ -58,8 +51,6 @@ function loadAllRestaurants(tx) {
             $.mobile.changePage('#info', { dataUrl: `/#info?parameter=${res_id}` });
             window.location.href = "/#info"
         })
-
-
     })
 }
 function toNumRating(stringRating) {
@@ -89,6 +80,16 @@ function onCameraSuccess(imageURI) {
 function onCameraError(message) {
     alert(message);
 }
+function onSubmitNotes(db, user_name, note, res_id){
+    console.log(user_name, note, res_id)
+    db.transaction(function(tx){
+        tx.executeSql(`insert into notes(content, user_name, res_id) values ("${note}", "${user_name}", "${res_id}")`)
+        window.location.href = "#info"
+        // tx.executeSql("select * from notes", [], function(tx, rs){
+        //     console.log(rs)
+        // })
+    }, errorCB, successCB)
+}
 $(document).ready(function () {
     //connect database
     var db = window.openDatabase("Database", "1.0", "Cordova Demo", 2000000);
@@ -104,8 +105,7 @@ $(document).ready(function () {
         let param = window.location.href.split("?")[1]
         let res_id = param.replace("parameter=", "");
         db.transaction(function (tx) {
-            tx.executeSql(`select * from restaurants left join notes on restaurants.res_id = notes.res_id left join users on users.user_id = notes.user_id where restaurants.res_id=${res_id}`, [], function (t, rs) {
-                console.log(rs)
+            tx.executeSql(`select * from restaurants left join notes on restaurants.res_id = notes.res_id where restaurants.res_id=${res_id}`, [], function (t, rs) {
                 let resNum = rs.rows.length
                 $("#ta-note-list").empty();
                 for (let i = 0; i < resNum; i++) {
@@ -117,19 +117,30 @@ $(document).ready(function () {
                         $('.ta-info-res-price').text(price)
                         $('.ta-info-res-rating').text(rating)
                     }
-                    let { note_id, content, user_id, user_name } = rs.rows.item(i)
+                    let { note_id, content, user_name } = rs.rows.item(i)
                     if(note_id != null){
                         $("#ta-note-list").append(
                             `<label for="user1">${user_name}</label>` + 
-                            `<textarea name="user1" id=${note_id} cols="20" rows="5" readonly>alo</textarea>`
+                            `<textarea name="user1" id=${note_id} cols="20" rows="5" readonly>${content}</textarea>`
                         )
                     }
                 }
-                
+
+                $("#ta-noteForm").submit(function(e){
+                    e.preventDefault()
+                    let user_name = e.target.user_name.value
+                    let note = e.target.note.value
+                    console.log("username", user_name, "note", note)
+                    onSubmitNotes(db, user_name, note, res_id)
+                    $('#ta-note-list').listview().listview('refresh');
+                })
             })
         }, errorCB, successCB)
-
     });
+
+    $("#takepicture").on("click", function(e){
+        console.log(e)
+    })
 
 
     //star rating jquery
