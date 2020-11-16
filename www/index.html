@@ -20,6 +20,7 @@
 </head>
 
 <body>
+
     <div data-role="page" id="list">
         <div data-role="header" data-theme="a">
             <h1><img src="img/logo.png" alt="i-rate mobile" width="30" height="30"
@@ -68,38 +69,38 @@
         <div data-role="content">
             <form id="reviewForm">
                 <fieldset>
-                    <label for="photo">Take a picture:</label>
+                    <label for="photo">Take a picture(optional):</label>
                     <div id="takepicture" class="ui-btn ui-icon-camera ui-btn-icon-left ui-shadow ui-corner-all">Take
                         Picture</div>
-                    <img style="width:60px;height:60px;" id="smallImage" />
+                    <img style="width:80%;height:200px; margin: auto" id="image" src="img/no-image.png" />
+
 
                 </fieldset>
                 <fieldset data-role="fieldcontain">
-                    <label for="uname">Reviewer Name:</label>
-                    <input type="text" name="uname" id="uname" placeholder="Your Name..." />
+                    <label for="rname">Restaurant Name:</label>
+                    <input type="text" name="rname" id="rname" placeholder="Restaurant Name..." />
                 </fieldset>
 
                 <fieldset data-role="fieldcontain">
                     <label for="rtype" class="select">Restaurant Type:</label>
                     <select name="rtype" id="rtype" data-mini="true">
                         <option value="fastfood">Fast food</option>
-                        <option value="lunch">Lunch</option>
-                        <option value="diner">Diner</option>
-                        <option value="drink">Drink</option>
+                        <option value="grill">Grill</option>
+                        <option value="seafood">Sea Food</option>
                     </select>
                 </fieldset>
 
-                <fieldset data-role="fieldcontain" class="ui-grid-b">
-                    <div class="ui-block-a">
+                <fieldset data-role="fieldcontain" class="ui-grid-c">
+                    <div class="ui-block-a" style="width: 40%">
                         <label for="time">Time:</label>
                         <input type="time" name="time" id="time" />
                     </div>
 
-                    <div class="ui-block-b">
+                    <div class="ui-block-b" style="width: 20%">
 
                     </div>
 
-                    <div class="ui-block-b">
+                    <div class="ui-block-c" style="width: 40%">
                         <label for="date">Date:</label>
                         <input type="date" name="date" id="date" />
                     </div>
@@ -165,10 +166,16 @@
 
                 <fieldset data-role="fieldcontain">
                     <label for="note">Add note(optional):</label>
-                    <textarea name="note" id="note" cols="30" rows="10"></textarea>
+                    <textarea name="note" cols="30" rows="10"></textarea>
                 </fieldset>
 
-                <input data-theme="a" type="submit" id="submit" value="Submit" />
+                <fieldset data-role="fieldcontain">
+                    <label for="uname">Reporter Name:</label>
+                    <input type="text" name="uname" id="uname" placeholder="Your Name..." />
+                </fieldset>
+
+                <input style="width: 200px; margin: 20px auto;" class="ui-btn ui-shadow ui-corner-all" type="submit"
+                    id="submit" value="Submit" />
             </form>
         </div>
 
@@ -229,15 +236,49 @@
                 </div>
             </div>
 
-            <a data-role="button" href="#addnote" data-transition="pop" data-icon="edit"
-                style="width: 150px; margin: 20px auto;">Add Note</a>
+
+            <a data-role="button" href="#addnote" data-rel="popup" data-position-to="window" data-transition="pop"
+                data-icon="edit" style="width: 150px; margin: 20px auto;">Add Note</a>
+            <div data-role="popup" id="addnote" data-overlay-theme="a" data-theme="a" data-dismissible="false"
+                style="max-width:400px;">
+                <div data-role="header" data-theme="a">
+                    <h1>Add Note</h1>
+                </div>
+                <div role="main" class="ui-content">
+                    <form id="noteForm" class="ui-title">
+                        <fieldset data-role="fieldcontain">
+                            <label for="uname">Reviewer Name:</label>
+                            <input type="text" name="uname" placeholder="Reviewer Name..." />
+                        </fieldset>
+
+                        <fieldset data-role="fieldcontain">
+                            <label for="note">Add note:</label>
+                            <textarea name="note"  cols="30" rows="10"></textarea>
+                        </fieldset>
+
+                        <fieldset data-role="fieldcontain" class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <button class="ui-btn ui-shadow ui-corner-all" type="submit"
+                                    value="submit">Submit</button>
+                            </div>
+
+                            <div class="ui-block-b">
+                                <a data-role="button" href="#" data-rel="back">Cancel</a>
+                            </div>
+
+                        </fieldset>
+
+
+                    </form>
+                </div>
+
+            </div>
         </div>
 
         <div data-role="footer" data-position="fixed">
             <p style="text-align: center;">&copy; Copyright 2020</p>
         </div>
     </div>
-
 
 </body>
 

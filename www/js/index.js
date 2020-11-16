@@ -18,7 +18,7 @@ function populateDB(tx) {
     tx.executeSql('CREATE TABLE IF NOT EXISTS notes (note_id integer primary key not null,content text not null,user_id integer not null, res_id integer not null, foreign key (user_id) references users (user_id) on update cascade on delete cascade, foreign key (res_id) references restaurants (res_id) on update cascade on delete cascade)');
     //insert note
     tx.executeSql('insert into notes(content, user_id, res_id) values ("excellent food", 1, 1)')
-    tx.executeSql('insert into notes(content, user_id, res_id) values ("good food", 2, 1)')
+    tx.executeSql('insert into notes(content, user_id, res_id) values ("good food", 2, 2)')
     tx.executeSql('insert into notes(content, user_id, res_id) values ("bad food", 3, 1)')
     tx.executeSql('insert into notes(content, user_id, res_id) values ("excellent food 2", 1, 2)')
 }
@@ -83,8 +83,7 @@ function takePhoto() {
     })
 }
 function onCameraSuccess(imageURI) {
-    alert('sucess');
-    var img = document.getElementById('smallImage');
+    var img = document.getElementById('image');
     img.src = imageURI;
 }
 function onCameraError(message) {
