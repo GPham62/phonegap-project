@@ -19,7 +19,7 @@ function populateDB(tx) {
     tx.executeSql('CREATE TABLE IF NOT EXISTS notes (note_id integer primary key not null,content text not null,user_id integer not null, res_id integer not null, foreign key (user_id) references users (user_id) on update cascade on delete cascade, foreign key (res_id) references restaurants (res_id) on update cascade on delete cascade)');
     //insert note
     tx.executeSql('insert into notes(content, user_id, res_id) values ("excellent food", 1, 1)')
-    tx.executeSql('insert into notes(content, user_id, res_id) values ("good food", 2, 1)')
+    tx.executeSql('insert into notes(content, user_id, res_id) values ("good food", 2, 2)')
     tx.executeSql('insert into notes(content, user_id, res_id) values ("bad food", 3, 1)')
 }
 function errorCB(tx, err) {
@@ -105,7 +105,7 @@ $(document).ready(function () {
     //load all restaurants
     db.transaction(loadAllRestaurants, errorCB, function (tx) {
         db.transaction(function (tx) {
-            tx.executeSql('select * from notes where res_id = ?', [], function (tx, rs) {
+            tx.executeSql('select * from restaurants left join notes on restaurants.res_id = notes.res_id inner join users on users.user_id = notes.user_id', [], function (tx, rs) {
                 //đây này where vào rồi vẫn select hết đhs
                 
                 // let noteNum = rs.rows.length;
@@ -124,11 +124,7 @@ $(document).ready(function () {
     $("#takepicture").on('click', () => {
         takePhoto();
     })
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> fbc2a51e74881611104d7614931db3888475f89e
     //star rating jquery
     /* 1. Visualizing things on Hover - See next part for action on click */
     $('#prices li').on('mouseover', function () {

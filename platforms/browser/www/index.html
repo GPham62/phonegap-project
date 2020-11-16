@@ -20,6 +20,7 @@
 </head>
 
 <body>
+
     <div data-role="page" id="list">
         <div data-role="header" data-theme="a">
             <h1><img src="img/logo.png" alt="i-rate mobile" width="30" height="30"
@@ -68,17 +69,11 @@
         <div data-role="content">
             <form id="reviewForm">
                 <fieldset>
-<<<<<<< HEAD
                     <label for="photo">Take a picture(optional):</label>
                     <div id="takepicture" class="ui-btn ui-icon-camera ui-btn-icon-left ui-shadow ui-corner-all">Take
                         Picture</div>
-                    <img style="width:80%;height:200px; margin: auto" id="image" src="img/no-image.png"/>
-=======
-                    <label for="photo">Take a picture:</label>
-                    <div id="takepicture" class="ui-btn ui-icon-camera ui-btn-icon-left ui-shadow ui-corner-all">Take
-                        Picture</div>
-                    <img style="width:60px;height:60px;" id="smallImage" />
->>>>>>> fbc2a51e74881611104d7614931db3888475f89e
+                    <img style="width:80%;height:200px; margin: auto" id="image" src="img/no-image.png" />
+
 
                 </fieldset>
                 <fieldset data-role="fieldcontain">
@@ -171,7 +166,7 @@
 
                 <fieldset data-role="fieldcontain">
                     <label for="note">Add note(optional):</label>
-                    <textarea name="note" id="note" cols="30" rows="10"></textarea>
+                    <textarea name="note" cols="30" rows="10"></textarea>
                 </fieldset>
 
                 <fieldset data-role="fieldcontain">
@@ -253,7 +248,7 @@
                 </div>
             </div>
 
-<<<<<<< HEAD
+
             <a data-role="button" href="#addnote" data-rel="popup" data-position-to="window" data-transition="pop"
                 data-icon="edit" style="width: 150px; margin: 20px auto;">Add Note</a>
             <div data-role="popup" id="addnote" data-overlay-theme="a" data-theme="a" data-dismissible="false"
@@ -265,18 +260,18 @@
                     <form id="noteForm" class="ui-title">
                         <fieldset data-role="fieldcontain">
                             <label for="uname">Reviewer Name:</label>
-                            <input type="text" name="uname" id="uname" placeholder="Reviewer Name..." />
+                            <input type="text" name="uname" placeholder="Reviewer Name..." />
                         </fieldset>
 
                         <fieldset data-role="fieldcontain">
                             <label for="note">Add note:</label>
-                            <textarea name="note" id="note" cols="30" rows="10"></textarea>
+                            <textarea name="note"  cols="30" rows="10"></textarea>
                         </fieldset>
 
                         <fieldset data-role="fieldcontain" class="ui-grid-a">
                             <div class="ui-block-a">
-                                <button class="ui-btn ui-shadow ui-corner-all" type="submit" id="submit" value="submit"
-                                    >Submit</button>
+                                <button class="ui-btn ui-shadow ui-corner-all" type="submit"
+                                    value="submit">Submit</button>
                             </div>
 
                             <div class="ui-block-b">
@@ -290,10 +285,6 @@
                 </div>
 
             </div>
-=======
-            <a data-role="button" href="#addnote" data-transition="pop" data-icon="edit"
-                style="width: 150px; margin: 20px auto;">Add Note</a>
->>>>>>> fbc2a51e74881611104d7614931db3888475f89e
         </div>
 
         <div data-role="footer" data-position="fixed">
