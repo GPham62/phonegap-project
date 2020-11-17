@@ -1,11 +1,11 @@
 function populateDB(tx) {
     //create restaurants table
     tx.executeSql('DROP TABLE IF EXISTS restaurants');
-    tx.executeSql('CREATE TABLE IF NOT EXISTS restaurants (res_id integer primary key not null, res_name text not null, type text, price integer, service text, cleanliness text, quality text)');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS restaurants (res_id integer primary key not null, res_name text not null, type text, price integer, service text, cleanliness text, quality text, visited_time text)');
     //insert restaurant
-    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality) values ("res1", "type1", 10, "good", "good","excellent")');
-    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality) values ("res2", "type2", 20, "good", "good","excellent")');
-    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality) values ("res3", "type3", 30, "good", "good","excellent")');
+    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time) values ("res1", "type1", 10, "good", "good","excellent", "9PM 4/10/99")');
+    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time) values ("res2", "type2", 20, "good", "good","excellent", "9PM 4/10/99")');
+    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time) values ("res3", "type3", 30, "good", "good","excellent", "9PM 4/10/99")');
     //create note table
     tx.executeSql('DROP TABLE IF EXISTS notes');
     tx.executeSql('CREATE TABLE IF NOT EXISTS notes (note_id integer primary key not null,content text not null,user_name text not null, res_id integer not null, foreign key (res_id) references restaurants (res_id) on update cascade on delete cascade)');
@@ -80,15 +80,15 @@ function onCameraSuccess(imageURI) {
 function onCameraError(message) {
     alert(message);
 }
-function appendNewNote(note_id, user_name, content){
+function appendNewNote(note_id, user_name, content) {
     $("#ta-note-list").append(
-        `<label for="user1">${user_name}</label>` + 
+        `<label for="user1">${user_name}</label>` +
         `<textarea name="user1" id=${note_id} cols="20" rows="5" readonly>${content}</textarea>`
     )
 }
-function onSubmitNotes(db, user_name, note, res_id, note_id){
+function onSubmitNotes(db, user_name, note, res_id, note_id) {
     console.log(user_name, note, res_id)
-    db.transaction(function(tx){
+    db.transaction(function (tx) {
         tx.executeSql(`insert into notes(content, user_name, res_id) values ("${note}", "${user_name}", "${res_id}")`)
         appendNewNote(null, user_name, note)
     }, errorCB, successCB)
@@ -113,33 +113,39 @@ $(document).ready(function () {
                 $("#ta-note-list").empty();
                 for (let i = 0; i < resNum; i++) {
                     if (i == 0) {
-                        let { price, quality, res_name, service, cleaniless, type  } = rs.rows.item(i)
-                        let rating = calculateRating({ service: toNumRating(service), cleaniless: toNumRating(cleaniless), quality: toNumRating(quality) })            
+                        let { price, quality, res_name, service, cleaniless, type, visited_time } = rs.rows.item(i)
+                        let rating = calculateRating({ service: toNumRating(service), cleaniless: toNumRating(cleaniless), quality: toNumRating(quality) })
                         $('.ta-info-res-name').text(res_name)
                         $('.ta-info-res-type').text(type)
                         $('.ta-info-res-price').text(price)
                         $('.ta-info-res-rating').text(rating)
+                        $('.ta-info-res-visit').text(visited_time)
                     }
                     let { note_id, content, user_name } = rs.rows.item(i)
-                    if(note_id != null){
+                    if (note_id != null) {
                         appendNewNote(note_id, user_name, content)
                     }
                 }
 
-                $("#ta-noteForm").submit(function(e){
+                $("#ta-noteForm").submit(function (e) {
                     e.preventDefault()
                     let user_name = e.target.user_name.value
                     let note = e.target.note.value
                     onSubmitNotes(db, user_name, note, res_id)
+                    $(':input', '#ta-noteForm')
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .prop('checked', false)
+                        .prop('selected', false);
+                    window.location.href = "#info"
                 })
             })
         }, errorCB, successCB)
     });
 
-    $("#takepicture").on("click", function(e){
+    $("#takepicture").on("click", function (e) {
         console.log(e)
     })
-
 
     //star rating jquery
     /* 1. Visualizing things on Hover - See next part for action on click */
@@ -239,17 +245,21 @@ $(document).ready(function () {
                 reload: false
             });
             return false;
+        },
+        submitHandler: function (form) {
+            var uname = $('#reviewForm input[name="uname"]').val();
+            var rname = $('#reviewForm input[name="rname"]').val();
+            var rtype = $('#reviewForm select[name="rtype"]').val();
+            var rservice = $('#reviewForm select[name="rservice"]').val();
+            var rcleanliness = $('#reviewForm select[name="rcleanliness"]').val();
+            var rquality = $('#reviewForm select[name="rquality"]').val();
+            var note = $('textarea#rnote').val();
+            var time = $('#reviewForm input[name="time"]').val();
+            var date = $('#reviewForm input[name="date"]').val();
+            var price = parseInt($('#prices li.selected').last().data('value'), 10);
+            console.log(uname, rname, rtype, time, date, price, rservice, rcleanliness, rquality, note);
+            return false;
         }
-        // submitHandler: function (form) {
-        //     var uname = $('#reviewForm input[name="uname"]').val();
-        //     var rname = $('#reviewForm input[name="rname"]').val();
-        //     var rtype = $('#reviewForm select[name="rtype"]').val();
-        //     var time = $('#reviewForm input[name="time"]').val();
-        //     var date = $('#reviewForm input[name="date"]').val();
-        //     var price = parseInt($('#prices li.selected').last().data('value'), 10);
-        //     console.log(price);
-        //     return false;
-        // }
     });
 
 });

@@ -38,13 +38,14 @@
                 </div>
                 <div class="ui-block-b" style="width: 20%"></div>
                 <div class="ui-block-c" style="width: 50%">
-                    <input type="search" name="search-restaurant" id="search-restaurant" value=""
-                        placeholder="Search..." />
+                    <form class="ui-filterable">
+                        <input id="filterBasic-input" data-type="search">
+                    </form>
                 </div>
             </div>
 
             <div data-role="fieldcontain">
-                <ul id="ta-res-list" data-role="listview" data-split-theme="a" data-split-icon="arrow-r"
+                <ul id="ta-res-list" data-role="listview" data-filter="true" data-input="#filterBasic-input" data-split-theme="a" data-split-icon="arrow-r"
                     data-inset="true">
                 </ul>
             </div>
@@ -146,7 +147,7 @@
 
                 <fieldset data-role="fieldcontain">
                     <label for="clearnliness">Cleanliness Rating: </label>
-                    <select name="rclearnliness" id="rclearnliness" data-mini="true">
+                    <select name="rcleanliness" id="rcleanliness" data-mini="true">
                         <option value="improve">Need to improve</option>
                         <option value="okay">OKAY</option>
                         <option value="good">Good</option>
@@ -166,7 +167,7 @@
 
                 <fieldset data-role="fieldcontain">
                     <label for="note">Add note(optional):</label>
-                    <textarea name="note" cols="30" rows="10"></textarea>
+                    <textarea name="note" id ="rnote" cols="30" rows="10"></textarea>
                 </fieldset>
 
                 <fieldset data-role="fieldcontain">
