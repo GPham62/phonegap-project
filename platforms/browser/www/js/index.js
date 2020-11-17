@@ -80,14 +80,17 @@ function onCameraSuccess(imageURI) {
 function onCameraError(message) {
     alert(message);
 }
-function onSubmitNotes(db, user_name, note, res_id){
+function appendNewNote(note_id, user_name, content){
+    $("#ta-note-list").append(
+        `<label for="user1">${user_name}</label>` + 
+        `<textarea name="user1" id=${note_id} cols="20" rows="5" readonly>${content}</textarea>`
+    )
+}
+function onSubmitNotes(db, user_name, note, res_id, note_id){
     console.log(user_name, note, res_id)
     db.transaction(function(tx){
         tx.executeSql(`insert into notes(content, user_name, res_id) values ("${note}", "${user_name}", "${res_id}")`)
-        window.location.href = "#info"
-        // tx.executeSql("select * from notes", [], function(tx, rs){
-        //     console.log(rs)
-        // })
+        appendNewNote(null, user_name, note)
     }, errorCB, successCB)
 }
 $(document).ready(function () {
@@ -119,10 +122,7 @@ $(document).ready(function () {
                     }
                     let { note_id, content, user_name } = rs.rows.item(i)
                     if(note_id != null){
-                        $("#ta-note-list").append(
-                            `<label for="user1">${user_name}</label>` + 
-                            `<textarea name="user1" id=${note_id} cols="20" rows="5" readonly>${content}</textarea>`
-                        )
+                        appendNewNote(note_id, user_name, content)
                     }
                 }
 
@@ -130,9 +130,7 @@ $(document).ready(function () {
                     e.preventDefault()
                     let user_name = e.target.user_name.value
                     let note = e.target.note.value
-                    console.log("username", user_name, "note", note)
                     onSubmitNotes(db, user_name, note, res_id)
-                    $('#ta-note-list').listview().listview('refresh');
                 })
             })
         }, errorCB, successCB)
