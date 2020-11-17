@@ -38,7 +38,7 @@ function loadAllRestaurants(tx) {
         $(".ta-slide-btn").on('click', function (e) {
             let res_id = $(this).attr('res-id')
             $.mobile.changePage('#info', { dataUrl: `/#info?parameter=${res_id}` });
-            window.location.href = "/#info"
+            // window.location.href = "/#info"
         })
     })
 }
@@ -106,6 +106,7 @@ $(document).ready(function () {
 
     //get restaurant details
     $(document).on('pagebeforeshow', "#info", function (event, data) {
+        console.log("aloo")
         let param = window.location.href.split("?")[1]
         let res_id = param.replace("parameter=", "");
         db.transaction(function (tx) {
@@ -275,7 +276,6 @@ $(document).ready(function () {
                     $(".ta-slide-btn").on('click', function (e) {
                         let res_id = $(this).attr('res-id')
                         $.mobile.changePage('#info', { dataUrl: `/#info?parameter=${res_id}` });
-                        window.location.href = "/#info"
                     })
                 }, errorCB, successCB)
             })
