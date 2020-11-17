@@ -28,21 +28,10 @@ function loadAllRestaurants(tx) {
         let resArray = []
 
         for (let i = 0; i < restaurantNum; i++) {
-            let { res_id, res_name, service, quality, cleaniless } = rs.rows.item(i);
-            let rating = calculateRating({ service: toNumRating(service), cleaniless: toNumRating(cleaniless), quality: toNumRating(quality) })
+            let { res_id, res_name, service, quality, cleanliness } = rs.rows.item(i);
+            let rating = calculateRating({ service: toNumRating(service), cleanliness: toNumRating(cleanliness), quality: toNumRating(quality) })
             resArray.push(rs.rows.item(i))
-
-            $("#ta-res-list").append(
-                '<li data-theme="c">' +
-                `<a href="#info" data-transition="slide" res-id=${res_id}>` +
-                '<img src="img/restaurant1.png">' +
-                `<h2>${res_name}</h2>` +
-                `<p>Rating: <i class="fas fa-star">${rating}</i></p>` +
-                '</a>' +
-                `<a class=ta-slide-btn data-transition="slide" res-id=${res_id}></a>` +
-                '</li>'
-            )
-            // $("#ta-res-list").listview('refresh')
+            appendNewRes(res_id, res_name, rating)
         }
         $("#ta-res-list").listview('refresh')
 
@@ -64,8 +53,8 @@ function toNumRating(stringRating) {
         return 4;
     }
 }
-function calculateRating({ service, cleaniless, quality }) {
-    return Math.round((service + cleaniless + quality) / 3);
+function calculateRating({ service, cleanliness, quality }) {
+    return Math.round((service + cleanliness + quality) / 3);
 }
 function takePhoto() {
     navigator.camera.getPicture(onCameraSuccess, onCameraError, {
@@ -84,6 +73,18 @@ function appendNewNote(note_id, user_name, content) {
     $("#ta-note-list").append(
         `<label for="user1">${user_name}</label>` +
         `<textarea name="user1" id=${note_id} cols="20" rows="5" readonly>${content}</textarea>`
+    )
+}
+function appendNewRes(res_id, res_name, rating){
+    $("#ta-res-list").append(
+        '<li data-theme="c">' +
+        `<a class=ta-slide-btn data-transition="slide" res-id=${res_id}>` +
+        '<img src="img/restaurant1.png">' +
+        `<h2>${res_name}</h2>` +
+        `<p>Rating: <i class="fas fa-star">${rating}</i></p>` +
+        '</a>' +
+        `<a class=ta-slide-btn data-transition="slide" res-id=${res_id}></a>` +
+        '</li>'
     )
 }
 function onSubmitNotes(db, user_name, note, res_id, note_id) {
@@ -113,8 +114,8 @@ $(document).ready(function () {
                 $("#ta-note-list").empty();
                 for (let i = 0; i < resNum; i++) {
                     if (i == 0) {
-                        let { price, quality, res_name, service, cleaniless, type, visited_time } = rs.rows.item(i)
-                        let rating = calculateRating({ service: toNumRating(service), cleaniless: toNumRating(cleaniless), quality: toNumRating(quality) })
+                        let { price, quality, res_name, service, cleanliness, type, visited_time } = rs.rows.item(i)
+                        let rating = calculateRating({ service: toNumRating(service), cleanliness: toNumRating(cleanliness), quality: toNumRating(quality) })
                         $('.ta-info-res-name').text(res_name)
                         $('.ta-info-res-type').text(type)
                         $('.ta-info-res-price').text(price)
@@ -257,7 +258,28 @@ $(document).ready(function () {
             var time = $('#reviewForm input[name="time"]').val();
             var date = $('#reviewForm input[name="date"]').val();
             var price = parseInt($('#prices li.selected').last().data('value'), 10);
-            console.log(uname, rname, rtype, time, date, price, rservice, rcleanliness, rquality, note);
+
+            let newResId;
+            
+            db.transaction(function(tx){
+                tx.executeSql(`insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time) values ("${rname}", "${rtype}", "${price}", "${rservice}", "${rcleanliness}","${rquality}", "${time+date}")`, [], function(tx, rs){
+                    newResId = rs.insertId
+                })
+            }, errorCB, function(){
+                db.transaction(function(tx){
+                    tx.executeSql(`insert into notes(content, user_name, res_id) values ("${note}", "${uname}", ${newResId})`)
+                    let rating = calculateRating({ service: toNumRating(rservice), cleanliness: toNumRating(rcleanliness), quality: toNumRating(rquality) })
+                    appendNewRes(newResId, rname, rating)
+                    $('#ta-res-list').listview("refresh")
+
+                    $(".ta-slide-btn").on('click', function (e) {
+                        let res_id = $(this).attr('res-id')
+                        $.mobile.changePage('#info', { dataUrl: `/#info?parameter=${res_id}` });
+                        window.location.href = "/#info"
+                    })
+                }, errorCB, successCB)
+            })
+
             return false;
         }
     });
