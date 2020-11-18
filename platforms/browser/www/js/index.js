@@ -75,7 +75,7 @@ function appendNewNote(note_id, user_name, content) {
         `<textarea name="user1" id=${note_id} cols="20" rows="5" readonly>${content}</textarea>`
     )
 }
-function appendNewRes(res_id, res_name, rating){
+function appendNewRes(res_id, res_name, rating) {
     $("#ta-res-list").append(
         '<li data-theme="c">' +
         `<a class=ta-slide-btn data-transition="slide" res-id=${res_id}>` +
@@ -129,21 +129,33 @@ $(document).ready(function () {
                     }
                 }
 
-                $("#ta-noteForm").submit(function (e) {
-                    e.preventDefault()
-                    let user_name = e.target.user_name.value
-                    let note = e.target.note.value
-                    onSubmitNotes(db, user_name, note, res_id)
-                    $(':input', '#ta-noteForm')
-                        .not(':button, :submit, :reset, :hidden')
-                        .val('')
-                        .prop('checked', false)
-                        .prop('selected', false);
-                    window.location.href = "#info"
-                })
+                // $("#ta-noteForm").submit(function (e) {
+                //     e.preventDefault()
+                //     let user_name = e.target.user_name.value
+                //     let note = e.target.note.value
+                //     onSubmitNotes(db, user_name, note, res_id)
+                //     $(':input', '#ta-noteForm')
+                //         .not(':button, :submit, :reset, :hidden')
+                //         .val('')
+                //         .prop('checked', false)
+                //         .prop('selected', false);
+                //     window.location.href = "#info"
+                // })
             })
         }, errorCB, successCB)
     });
+    $("#ta-noteForm").submit(function (e) {
+        e.preventDefault()
+        let user_name = e.target.user_name.value
+        let note = e.target.note.value
+        onSubmitNotes(db, user_name, note, 1)
+        $(':input', '#ta-noteForm')
+            .not(':button, :submit, :reset, :hidden')
+            .val('')
+            .prop('checked', false)
+            .prop('selected', false);
+        window.location.href = "#info"
+    })
 
     $("#takepicture").on("click", function (e) {
         console.log(e)
@@ -261,13 +273,13 @@ $(document).ready(function () {
             var price = parseInt($('#prices li.selected').last().data('value'), 10);
 
             let newResId;
-            
-            db.transaction(function(tx){
-                tx.executeSql(`insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time) values ("${rname}", "${rtype}", "${price}", "${rservice}", "${rcleanliness}","${rquality}", "${time+date}")`, [], function(tx, rs){
+
+            db.transaction(function (tx) {
+                tx.executeSql(`insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time) values ("${rname}", "${rtype}", "${price}", "${rservice}", "${rcleanliness}","${rquality}", "${time + date}")`, [], function (tx, rs) {
                     newResId = rs.insertId
                 })
-            }, errorCB, function(){
-                db.transaction(function(tx){
+            }, errorCB, function () {
+                db.transaction(function (tx) {
                     tx.executeSql(`insert into notes(content, user_name, res_id) values ("${note}", "${uname}", ${newResId})`)
                     let rating = calculateRating({ service: toNumRating(rservice), cleanliness: toNumRating(rcleanliness), quality: toNumRating(rquality) })
                     appendNewRes(newResId, rname, rating)
