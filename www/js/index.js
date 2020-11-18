@@ -122,33 +122,23 @@ $(document).ready(function () {
                         $('.ta-info-res-price').text(price)
                         $('.ta-info-res-rating').text(rating)
                         $('.ta-info-res-visit').text(visited_time)
+                        $('#hiddenResId').val(res_id)
                     }
                     let { note_id, content, user_name } = rs.rows.item(i)
                     if (note_id != null) {
                         appendNewNote(note_id, user_name, content)
                     }
                 }
-
-                // $("#ta-noteForm").submit(function (e) {
-                //     e.preventDefault()
-                //     let user_name = e.target.user_name.value
-                //     let note = e.target.note.value
-                //     onSubmitNotes(db, user_name, note, res_id)
-                //     $(':input', '#ta-noteForm')
-                //         .not(':button, :submit, :reset, :hidden')
-                //         .val('')
-                //         .prop('checked', false)
-                //         .prop('selected', false);
-                //     window.location.href = "#info"
-                // })
             })
         }, errorCB, successCB)
     });
+
     $("#ta-noteForm").submit(function (e) {
         e.preventDefault()
         let user_name = e.target.user_name.value
         let note = e.target.note.value
-        onSubmitNotes(db, user_name, note, 1)
+        let res_id = $("#hiddenResId").val()
+        onSubmitNotes(db, user_name, note, res_id)
         $(':input', '#ta-noteForm')
             .not(':button, :submit, :reset, :hidden')
             .val('')
@@ -275,7 +265,7 @@ $(document).ready(function () {
             let newResId;
 
             db.transaction(function (tx) {
-                tx.executeSql(`insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time) values ("${rname}", "${rtype}", "${price}", "${rservice}", "${rcleanliness}","${rquality}", "${time + date}")`, [], function (tx, rs) {
+                tx.executeSql(`insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time) values ("${rname}", "${rtype}", "${price}", "${rservice}", "${rcleanliness}","${rquality}", "${time + " " + date}")`, [], function (tx, rs) {
                     newResId = rs.insertId
                 })
             }, errorCB, function () {
@@ -289,9 +279,16 @@ $(document).ready(function () {
                         let res_id = $(this).attr('res-id')
                         $.mobile.changePage('#info', { dataUrl: `/#info?parameter=${res_id}` });
                     })
+
+                    $(':input', '#review')
+                        .not(':button, :submit, :reset')
+                        .val('')
+                        .prop('checked', false)
+                        .prop('selected', false);
+                    
+                    window.location.href = "#list"
                 }, errorCB, successCB)
             })
-
             return false;
         }
     });
