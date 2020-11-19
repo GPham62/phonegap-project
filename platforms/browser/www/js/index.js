@@ -33,7 +33,7 @@ function loadAllRestaurants(tx) {
             resArray.push(rs.rows.item(i))
             appendNewRes(res_id, res_name, rating, imageURI)
         }
-        $("#ta-res-list:visible").listview('refresh')
+        $("#ta-res-list").listview('refresh')
 
         $(".ta-slide-btn").on('click', function (e) {
             let res_id = $(this).attr('res-id')
@@ -64,7 +64,6 @@ function takePhoto() {
 function onCameraSuccess(imageURI) {
     console.log(imageURI)
     var img = document.getElementById('image');
-    document.getElementById('popupImg').src = imageURI;
     img.src = imageURI;
 }
 function onCameraError(message) {
@@ -87,6 +86,10 @@ function appendNewRes(res_id, res_name, rating, imageURI) {
         `<a class=ta-slide-btn data-transition="slide" res-id=${res_id}></a>` +
         '</li>'
     )
+}
+function deleteRes(res_id) {
+    var a_resId = document.querySelector(`a[res-id="${res_id}"]`);
+    a_resId.closest('li').remove();
 }
 function onSubmitNotes(db, user_name, note, res_id, note_id) {
     console.log(user_name, note, res_id)
@@ -135,7 +138,7 @@ $(document).ready(function () {
         }, errorCB, successCB)
     });
 
-    $("#takepicture").on('click', function(){
+    $("#takepicture").on('click', function () {
         takePhoto();
     })
 
@@ -150,7 +153,7 @@ $(document).ready(function () {
             .val('')
             .prop('checked', false)
             .prop('selected', false);
-            $( "#ta-noteForm-close" ).trigger( "click" );
+        $("#ta-noteForm-close").trigger("click");
         // window.location.href = "#info"
     })
 
@@ -210,6 +213,15 @@ $(document).ready(function () {
         return this.optional(element) || val > 0;
     }, "Price is required!");
 
+    $("#delResBtn").on("click", function () {
+        let res_id = $("#hiddenResId").val()
+        db.transaction(function (tx) {
+            tx.executeSql(`delete from restaurants where restaurants.res_id=${res_id}`)
+            deleteRes(res_id);
+        }, errorCB, successCB)
+    })
+
+
     $("#reviewForm").validate({
         ignore: [],
         rules:
@@ -248,12 +260,6 @@ $(document).ready(function () {
             err.insertAfter(element.parent());
         },
         submitHandler: function (form) {
-            $(':mobile-pagecontainer').pagecontainer('change', '#info', {
-                reload: false
-            });
-            return false;
-        },
-        submitHandler: function (form) {
             var uname = $('#reviewForm input[name="uname"]').val();
             var rname = $('#reviewForm input[name="rname"]').val();
             var rtype = $('#reviewForm select[name="rtype"]').val();
@@ -265,7 +271,7 @@ $(document).ready(function () {
             var date = $('#reviewForm input[name="date"]').val();
             var price = parseInt($('#prices li.selected').last().data('value'), 10);
             var imageURI = $("#image").attr('src')
-            
+
             let newResId;
 
             db.transaction(function (tx) {
@@ -274,12 +280,12 @@ $(document).ready(function () {
                 })
             }, errorCB, function () {
                 db.transaction(function (tx) {
-                    if(note != ''){
+                    if (note != '') {
                         tx.executeSql(`insert into notes(content, user_name, res_id) values ("${note}", "${uname}", ${newResId})`)
                     }
                     let rating = calculateRating({ service: toNumRating(rservice), cleanliness: toNumRating(rcleanliness), quality: toNumRating(rquality) })
                     appendNewRes(newResId, rname, rating, imageURI)
-                    $('#ta-res-list:visible').listview("refresh")
+                    $('#ta-res-list').listview("refresh")
 
                     $(".ta-slide-btn").on('click', function (e) {
                         let res_id = $(this).attr('res-id')
@@ -292,7 +298,7 @@ $(document).ready(function () {
                         .prop('checked', false)
                         .prop('selected', false);
                     $("#image").attr("src", "img/no-image.png")
-                    
+
                     window.location.href = "#list"
                 }, errorCB, successCB)
             })
