@@ -31,10 +31,9 @@ function loadAllRestaurants(tx) {
             let { res_id, res_name, service, quality, cleanliness, imageURI } = rs.rows.item(i);
             let rating = calculateRating({ service: toNumRating(service), cleanliness: toNumRating(cleanliness), quality: toNumRating(quality) })
             resArray.push(rs.rows.item(i))
-            alert("loadAllRestaurants: ", imageURI)
             appendNewRes(res_id, res_name, rating, imageURI)
         }
-        $("#ta-res-list").listview('refresh')
+        $("#ta-res-list:visible").listview('refresh')
 
         $(".ta-slide-btn").on('click', function (e) {
             let res_id = $(this).attr('res-id')
@@ -65,6 +64,7 @@ function takePhoto() {
 function onCameraSuccess(imageURI) {
     console.log(imageURI)
     var img = document.getElementById('image');
+    document.getElementById('popupImg').src = imageURI;
     img.src = imageURI;
 }
 function onCameraError(message) {
@@ -277,7 +277,7 @@ $(document).ready(function () {
                     tx.executeSql(`insert into notes(content, user_name, res_id) values ("${note}", "${uname}", ${newResId})`)
                     let rating = calculateRating({ service: toNumRating(rservice), cleanliness: toNumRating(rcleanliness), quality: toNumRating(rquality) })
                     appendNewRes(newResId, rname, rating, imageURI)
-                    $('#ta-res-list').listview("refresh")
+                    $('#ta-res-list:visible').listview("refresh")
 
                     $(".ta-slide-btn").on('click', function (e) {
                         let res_id = $(this).attr('res-id')

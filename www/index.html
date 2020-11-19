@@ -44,8 +44,8 @@
             </div>
 
             <div data-role="fieldcontain">
-                <ul id="ta-res-list" data-role="listview" data-filter="true" data-input="#filterBasic-input" data-split-theme="a" data-split-icon="arrow-r"
-                    data-inset="true">
+                <ul id="ta-res-list" data-role="listview" data-filter="true" data-input="#filterBasic-input"
+                    data-split-theme="a" data-split-icon="arrow-r" data-inset="true">
                 </ul>
             </div>
 
@@ -72,7 +72,13 @@
                     <label for="photo">Take a picture(optional):</label>
                     <div id="takepicture" class="ui-btn ui-icon-camera ui-btn-icon-left ui-shadow ui-corner-all">Take
                         Picture</div>
-                    <img style="width:80%;height:200px; margin: auto" id="image" src="img/no-image.png" />
+                    <a href="#popupPhoto" data-rel="popup" data-position-to="window" data-transition="fade"><img
+                            style="width:80%;height:200px; margin: auto" id="image" src="img/no-image.png" /></a>
+                    <div data-role="popup" id="popupPhoto" data-overlay-theme="b" data-theme="b" data-corners="false">
+                        <a href="#" data-rel="back"
+                            class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+                        <img id="popupImg" src="img/no-image.png" style="max-height:512px;">
+                    </div>
                 </fieldset>
                 <fieldset data-role="fieldcontain">
                     <label for="rname">Restaurant Name:</label>
@@ -164,7 +170,7 @@
 
                 <fieldset data-role="fieldcontain">
                     <label for="note">Add note(optional):</label>
-                    <textarea name="note" id ="rnote" cols="30" rows="10"></textarea>
+                    <textarea name="note" id="rnote" cols="30" rows="10"></textarea>
                 </fieldset>
 
                 <fieldset data-role="fieldcontain">

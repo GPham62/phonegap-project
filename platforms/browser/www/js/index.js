@@ -1,11 +1,11 @@
 function populateDB(tx) {
     //create restaurants table
     tx.executeSql('DROP TABLE IF EXISTS restaurants');
-    tx.executeSql('CREATE TABLE IF NOT EXISTS restaurants (res_id integer primary key not null, res_name text not null, type text, price integer, service text, cleanliness text, quality text, visited_time text)');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS restaurants (res_id integer primary key not null, res_name text not null, type text, price integer, service text, cleanliness text, quality text, visited_time text, imageURI text)');
     //insert restaurant
-    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time) values ("res1", "type1", 10, "good", "good","excellent", "9PM 4/10/99")');
-    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time) values ("res2", "type2", 20, "good", "good","excellent", "9PM 4/10/99")');
-    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time) values ("res3", "type3", 30, "good", "good","excellent", "9PM 4/10/99")');
+    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("res1", "type1", 10, "good", "good","excellent", "9PM 4/10/99", "img/restaurant1.png")');
+    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("res2", "type2", 20, "good", "good","excellent", "9PM 4/10/99", "img/restaurant1.png")');
+    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("res3", "type3", 30, "good", "good","excellent", "9PM 4/10/99", "img/restaurant1.png")');
     //create note table
     tx.executeSql('DROP TABLE IF EXISTS notes');
     tx.executeSql('CREATE TABLE IF NOT EXISTS notes (note_id integer primary key not null,content text not null,user_name text not null, res_id integer not null, foreign key (res_id) references restaurants (res_id) on update cascade on delete cascade)');
@@ -28,17 +28,16 @@ function loadAllRestaurants(tx) {
         let resArray = []
 
         for (let i = 0; i < restaurantNum; i++) {
-            let { res_id, res_name, service, quality, cleanliness } = rs.rows.item(i);
+            let { res_id, res_name, service, quality, cleanliness, imageURI } = rs.rows.item(i);
             let rating = calculateRating({ service: toNumRating(service), cleanliness: toNumRating(cleanliness), quality: toNumRating(quality) })
             resArray.push(rs.rows.item(i))
-            appendNewRes(res_id, res_name, rating)
+            appendNewRes(res_id, res_name, rating, imageURI)
         }
-        $("#ta-res-list").listview('refresh')
+        $("#ta-res-list:visible").listview('refresh')
 
         $(".ta-slide-btn").on('click', function (e) {
             let res_id = $(this).attr('res-id')
             $.mobile.changePage('#info', { dataUrl: `/#info?parameter=${res_id}` });
-            // window.location.href = "/#info"
         })
     })
 }
@@ -63,7 +62,9 @@ function takePhoto() {
     })
 }
 function onCameraSuccess(imageURI) {
+    console.log(imageURI)
     var img = document.getElementById('image');
+    document.getElementById('popupImg').src = imageURI;
     img.src = imageURI;
 }
 function onCameraError(message) {
@@ -75,11 +76,11 @@ function appendNewNote(note_id, user_name, content) {
         `<textarea name="user1" id=${note_id} cols="20" rows="5" readonly>${content}</textarea>`
     )
 }
-function appendNewRes(res_id, res_name, rating) {
+function appendNewRes(res_id, res_name, rating, imageURI) {
     $("#ta-res-list").append(
         '<li data-theme="c">' +
         `<a class=ta-slide-btn data-transition="slide" res-id=${res_id}>` +
-        '<img src="img/restaurant1.png">' +
+        `<img src=${imageURI}>` +
         `<h2>${res_name}</h2>` +
         `<p>Rating: <i class="fas fa-star">${rating}</i></p>` +
         '</a>' +
@@ -94,6 +95,7 @@ function onSubmitNotes(db, user_name, note, res_id, note_id) {
         appendNewNote(null, user_name, note)
     }, errorCB, successCB)
 }
+
 $(document).ready(function () {
     //connect database
     var db = window.openDatabase("Database", "1.0", "Cordova Demo", 2000000);
@@ -115,8 +117,9 @@ $(document).ready(function () {
                 $("#ta-note-list").empty();
                 for (let i = 0; i < resNum; i++) {
                     if (i == 0) {
-                        let { price, quality, res_name, service, cleanliness, type, visited_time } = rs.rows.item(i)
+                        let { price, quality, res_name, service, cleanliness, type, visited_time, imageURI } = rs.rows.item(i)
                         let rating = calculateRating({ service: toNumRating(service), cleanliness: toNumRating(cleanliness), quality: toNumRating(quality) })
+                        $("#ta-info-image").attr("src", imageURI)
                         $('.ta-info-res-name').text(res_name)
                         $('.ta-info-res-type').text(type)
                         $('.ta-info-res-price').text(price)
@@ -133,6 +136,10 @@ $(document).ready(function () {
         }, errorCB, successCB)
     });
 
+    $("#takepicture").on('click', function(){
+        takePhoto();
+    })
+
     $("#ta-noteForm").submit(function (e) {
         e.preventDefault()
         let user_name = e.target.user_name.value
@@ -145,10 +152,6 @@ $(document).ready(function () {
             .prop('checked', false)
             .prop('selected', false);
         window.location.href = "#info"
-    })
-
-    $("#takepicture").on("click", function (e) {
-        console.log(e)
     })
 
     //star rating jquery
@@ -261,19 +264,20 @@ $(document).ready(function () {
             var time = $('#reviewForm input[name="time"]').val();
             var date = $('#reviewForm input[name="date"]').val();
             var price = parseInt($('#prices li.selected').last().data('value'), 10);
-
+            var imageURI = $("#image").attr('src')
+            
             let newResId;
 
             db.transaction(function (tx) {
-                tx.executeSql(`insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time) values ("${rname}", "${rtype}", "${price}", "${rservice}", "${rcleanliness}","${rquality}", "${time + " " + date}")`, [], function (tx, rs) {
+                tx.executeSql(`insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("${rname}", "${rtype}", "${price}", "${rservice}", "${rcleanliness}","${rquality}", "${time + " " + date}", "${imageURI}")`, [], function (tx, rs) {
                     newResId = rs.insertId
                 })
             }, errorCB, function () {
                 db.transaction(function (tx) {
                     tx.executeSql(`insert into notes(content, user_name, res_id) values ("${note}", "${uname}", ${newResId})`)
                     let rating = calculateRating({ service: toNumRating(rservice), cleanliness: toNumRating(rcleanliness), quality: toNumRating(rquality) })
-                    appendNewRes(newResId, rname, rating)
-                    $('#ta-res-list').listview("refresh")
+                    appendNewRes(newResId, rname, rating, imageURI)
+                    $('#ta-res-list:visible').listview("refresh")
 
                     $(".ta-slide-btn").on('click', function (e) {
                         let res_id = $(this).attr('res-id')
@@ -285,6 +289,7 @@ $(document).ready(function () {
                         .val('')
                         .prop('checked', false)
                         .prop('selected', false);
+                    $("#image").attr("src", "img/no-image.png")
                     
                     window.location.href = "#list"
                 }, errorCB, successCB)

@@ -31,10 +31,9 @@ function loadAllRestaurants(tx) {
             let { res_id, res_name, service, quality, cleanliness, imageURI } = rs.rows.item(i);
             let rating = calculateRating({ service: toNumRating(service), cleanliness: toNumRating(cleanliness), quality: toNumRating(quality) })
             resArray.push(rs.rows.item(i))
-            alert("loadAllRestaurants: ", imageURI)
             appendNewRes(res_id, res_name, rating, imageURI)
         }
-        $("#ta-res-list").listview('refresh')
+        $("#ta-res-list:visible").listview('refresh')
 
         $(".ta-slide-btn").on('click', function (e) {
             let res_id = $(this).attr('res-id')
@@ -65,6 +64,7 @@ function takePhoto() {
 function onCameraSuccess(imageURI) {
     console.log(imageURI)
     var img = document.getElementById('image');
+    document.getElementById('popupImg').src = imageURI;
     img.src = imageURI;
 }
 function onCameraError(message) {
@@ -95,34 +95,8 @@ function onSubmitNotes(db, user_name, note, res_id, note_id) {
         appendNewNote(null, user_name, note)
     }, errorCB, successCB)
 }
-function onSuccess(position){
-    var longitude = position.coords.longitude;
-    var latitude = position.coords.latitude;
-    var latLong = new google.maps.LatLng(latitude, longitude);
-
-    var mapOptions = {
-        center: latLong,
-        zoom: 13,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-
-    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-    var marker = new google.maps.Marker({
-          position: latLong,
-          map: map,
-          title: 'my location'
-      });
-}
-
-function onError(error){
-    alert("the code is " + error.code + ". \n" + "message: " + error.message);
-}
-
-
 
 $(document).ready(function () {
-    navigator.geolocation.getCurrentPosition(onSuccess, onError);
     //connect database
     var db = window.openDatabase("Database", "1.0", "Cordova Demo", 2000000);
 
@@ -178,10 +152,6 @@ $(document).ready(function () {
             .prop('checked', false)
             .prop('selected', false);
         window.location.href = "#info"
-    })
-
-    $("#takepicture").on("click", function (e) {
-        console.log(e)
     })
 
     //star rating jquery
@@ -307,7 +277,7 @@ $(document).ready(function () {
                     tx.executeSql(`insert into notes(content, user_name, res_id) values ("${note}", "${uname}", ${newResId})`)
                     let rating = calculateRating({ service: toNumRating(rservice), cleanliness: toNumRating(rcleanliness), quality: toNumRating(rquality) })
                     appendNewRes(newResId, rname, rating, imageURI)
-                    $('#ta-res-list').listview("refresh")
+                    $('#ta-res-list:visible').listview("refresh")
 
                     $(".ta-slide-btn").on('click', function (e) {
                         let res_id = $(this).attr('res-id')
