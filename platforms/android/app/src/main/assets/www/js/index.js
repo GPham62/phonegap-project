@@ -150,12 +150,8 @@ $(document).ready(function () {
             .val('')
             .prop('checked', false)
             .prop('selected', false);
-<<<<<<< HEAD
-        window.location.href = "#info"
-=======
             $( "#ta-noteForm-close" ).trigger( "click" );
         // window.location.href = "#info"
->>>>>>> ce016bb63a777899fb8a230b14c887de5635b7cc
     })
 
     //star rating jquery
@@ -279,7 +275,6 @@ $(document).ready(function () {
             }, errorCB, function () {
                 db.transaction(function (tx) {
                     if(note != ''){
-                        console.log('co note')
                         tx.executeSql(`insert into notes(content, user_name, res_id) values ("${note}", "${uname}", ${newResId})`)
                     }
                     let rating = calculateRating({ service: toNumRating(rservice), cleanliness: toNumRating(rcleanliness), quality: toNumRating(rquality) })

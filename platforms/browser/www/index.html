@@ -243,6 +243,7 @@
 
             <a data-role="button" href="#addnote" data-rel="popup" data-position-to="window" data-transition="pop"
                 data-icon="edit" style="width: 150px; margin: 20px auto;">Add Note</a>
+
             <div data-role="popup" id="addnote" data-overlay-theme="a" data-theme="a" data-dismissible="false"
                 style="max-width:400px;">
                 <div data-role="header" data-theme="a">
@@ -269,13 +270,31 @@
                             </div>
 
                             <div class="ui-block-b">
-                                <a data-role="button" href="#" data-rel="back">Cancel</a>
+                                <a data-role="button" id="ta-noteForm-close" href="#" data-rel="back">Cancel</a>
                             </div>
 
                         </fieldset>
+
+
                     </form>
                 </div>
 
+            </div>
+            <a data-role="button" href="#deletenote" data-rel="popup" data-position-to="window" data-icon="delete" data-theme="b"
+                data-transition="pop" style="width: 150px; margin: 20px auto;">Delete
+                note</a>
+            <div data-role="popup" id="deletenote" data-overlay-theme="b" data-theme="b" data-dismissible="false"
+                style="max-width:400px;">
+                <div data-role="header" data-theme="a">
+                    <h1>Delete Note?</h1>
+                </div>
+                <div role="main" class="ui-content">
+                    <h3 class="ui-title">Are you sure you want to delete this note?</h3>
+                    <p>This action cannot be undone.</p>
+                    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Cancel</a>
+                    <a href="#list" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b"
+                        data-transition="flow">Delete</a>
+                </div>
             </div>
         </div>
 
