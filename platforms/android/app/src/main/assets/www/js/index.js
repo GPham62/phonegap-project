@@ -19,7 +19,7 @@ function errorCB(tx, err) {
     alert("Error processing SQL: " + err);
 }
 function successCB() {
-    // alert("success!");
+
 }
 function loadAllRestaurants(tx) {
     tx.executeSql('select * from restaurants', [], function (t, rs) {
@@ -108,7 +108,6 @@ $(document).ready(function () {
 
     //get restaurant details
     $(document).on('pagebeforeshow', "#info", function (event, data) {
-        console.log("aloo")
         let param = window.location.href.split("?")[1]
         let res_id = param.replace("parameter=", "");
         db.transaction(function (tx) {
@@ -151,7 +150,12 @@ $(document).ready(function () {
             .val('')
             .prop('checked', false)
             .prop('selected', false);
+<<<<<<< HEAD
         window.location.href = "#info"
+=======
+            $( "#ta-noteForm-close" ).trigger( "click" );
+        // window.location.href = "#info"
+>>>>>>> ce016bb63a777899fb8a230b14c887de5635b7cc
     })
 
     //star rating jquery
@@ -274,7 +278,10 @@ $(document).ready(function () {
                 })
             }, errorCB, function () {
                 db.transaction(function (tx) {
-                    tx.executeSql(`insert into notes(content, user_name, res_id) values ("${note}", "${uname}", ${newResId})`)
+                    if(note != ''){
+                        console.log('co note')
+                        tx.executeSql(`insert into notes(content, user_name, res_id) values ("${note}", "${uname}", ${newResId})`)
+                    }
                     let rating = calculateRating({ service: toNumRating(rservice), cleanliness: toNumRating(rcleanliness), quality: toNumRating(rquality) })
                     appendNewRes(newResId, rname, rating, imageURI)
                     $('#ta-res-list:visible').listview("refresh")
