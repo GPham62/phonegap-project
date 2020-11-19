@@ -16,7 +16,6 @@
     <script src="js/jquery-ui.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7R4uW-XD2bYX0wMVE8Vm87IHHQGdE52A"> </script>
 </head>
 
 <body>
@@ -79,8 +78,6 @@
                     <label for="rname">Restaurant Name:</label>
                     <input type="text" name="rname" id="rname" placeholder="Restaurant Name..." />
                 </fieldset>
-
-                <div id="map"></div>
 
                 <fieldset data-role="fieldcontain">
                     <label for="rtype" class="select">Restaurant Type:</label>
@@ -266,7 +263,7 @@
                             </div>
 
                             <div class="ui-block-b">
-                                <a data-role="button" href="#" data-rel="back">Cancel</a>
+                                <a data-role="button" id="ta-noteForm-close" href="#" data-rel="back">Cancel</a>
                             </div>
 
                         </fieldset>
