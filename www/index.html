@@ -16,7 +16,6 @@
     <script src="js/jquery-ui.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
-
 </head>
 
 <body>
@@ -74,8 +73,6 @@
                     <div id="takepicture" class="ui-btn ui-icon-camera ui-btn-icon-left ui-shadow ui-corner-all">Take
                         Picture</div>
                     <img style="width:80%;height:200px; margin: auto" id="image" src="img/no-image.png" />
-
-
                 </fieldset>
                 <fieldset data-role="fieldcontain">
                     <label for="rname">Restaurant Name:</label>
@@ -197,7 +194,7 @@
         </div>
 
         <div data-role="content">
-            <img src="img/restaurant1.png" class="info-img-cover">
+            <img id="ta-info-image" src="img/restaurant1.png" class="info-img-cover">
             <div class="tablerow">
                 <div class="left-table">Name:</div>
                 <div class="right-table ta-info-res-name"></div>

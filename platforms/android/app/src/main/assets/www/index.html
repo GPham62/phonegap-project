@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>I - Rate</title>
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+    <link rel="stylesheet" href="css/jquery.mobile.structure-1.4.5.min.css">
+    <link rel="stylesheet" href="css/jquery.mobile.theme-1.4.5.min.css">
+    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <script src="js/jquery.validate.min.js"></script>
+    <script src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script src="js/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7R4uW-XD2bYX0wMVE8Vm87IHHQGdE52A"> </script>
+</head>
+
+<body>
+
+    <div data-role="page" id="list">
+        <div data-role="header" data-theme="a">
+            <h1><img src="img/logo.png" alt="i-rate mobile" width="30" height="30"
+                    style="padding-right: 0.5em; vertical-align: middle;" />Restaurant List</h1>
+        </div>
+
+        <div data-role="content">
+            <div data-role="fieldcontain" class="ui-grid-c">
+                <div class="ui-block-a" style="width: 30%">
+                    <a data-theme="d" data-corners="false" data-role="button" data-transition="flip" href="#review">
+                        <img src="img/good-review.png" alt="rss" width="32" height="32"
+                            style="display: block; margin: 0 auto">
+                        Review
+                    </a>
+                </div>
+                <div class="ui-block-b" style="width: 20%"></div>
+                <div class="ui-block-c" style="width: 50%">
+                    <form class="ui-filterable">
+                        <input id="filterBasic-input" data-type="search">
+                    </form>
+                </div>
+            </div>
+
+            <div data-role="fieldcontain">
+                <ul id="ta-res-list" data-role="listview" data-filter="true" data-input="#filterBasic-input" data-split-theme="a" data-split-icon="arrow-r"
+                    data-inset="true">
+                </ul>
+            </div>
+
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+            <p style="text-align: center;">&copy; Copyright 2020</p>
+        </div>
+    </div>
+
+    <div data-role="page" id="review">
+        <div data-role="header" data-theme="a">
+            <a data-role="button" href="#list" data-icon="home" data-transition="turn" data-corners="false">Home</a>
+            <h1>
+                <img src="img/logo.png" alt="i-rate mobile" width="30" height="30"
+                    style="padding-right: 0.5em; vertical-align: middle;" />
+                Review
+            </h1>
+        </div>
+
+        <div data-role="content">
+            <form id="reviewForm">
+                <fieldset>
+                    <label for="photo">Take a picture(optional):</label>
+                    <div id="takepicture" class="ui-btn ui-icon-camera ui-btn-icon-left ui-shadow ui-corner-all">Take
+                        Picture</div>
+                    <img style="width:80%;height:200px; margin: auto" id="image" src="img/no-image.png" />
+                </fieldset>
+                <fieldset data-role="fieldcontain">
+                    <label for="rname">Restaurant Name:</label>
+                    <input type="text" name="rname" id="rname" placeholder="Restaurant Name..." />
+                </fieldset>
+
+                <div id="map"></div>
+
+                <fieldset data-role="fieldcontain">
+                    <label for="rtype" class="select">Restaurant Type:</label>
+                    <select name="rtype" id="rtype" data-mini="true">
+                        <option value="fastfood">Fast food</option>
+                        <option value="grill">Grill</option>
+                        <option value="seafood">Sea Food</option>
+                    </select>
+                </fieldset>
+
+                <fieldset data-role="fieldcontain" class="ui-grid-c">
+                    <div class="ui-block-a" style="width: 40%">
+                        <label for="time">Time:</label>
+                        <input type="time" name="time" id="time" />
+                    </div>
+
+                    <div class="ui-block-b" style="width: 20%">
+
+                    </div>
+
+                    <div class="ui-block-c" style="width: 40%">
+                        <label for="date">Date:</label>
+                        <input type="date" name="date" id="date" />
+                    </div>
+                </fieldset>
+
+                <fieldset data-role="fieldcontain">
+                    <label for="prices">Price:</label>
+
+                    <!-- Rating Stars Box -->
+                    <div class='rating-stars text-center'>
+                        <ul id='prices'>
+                            <li class='star' title='Poor' data-value='1'>
+                                <i class='fa fa-dollar-sign fa-fw'></i>
+                            </li>
+                            <li class='star' title='Fair' data-value='2'>
+                                <i class='fa fa-dollar-sign fa-fw'></i>
+                            </li>
+                            <li class='star' title='Good' data-value='3'>
+                                <i class='fa fa-dollar-sign fa-fw'></i>
+                            </li>
+                            <li class='star' title='Excellent' data-value='4'>
+                                <i class='fa fa-dollar-sign fa-fw'></i>
+                            </li>
+                            <li class='star' title='WOW!!!' data-value='5'>
+                                <i class='fa fa-dollar-sign fa-fw'></i>
+                            </li>
+                        </ul>
+                    </div>
+                    <input data-role="none" type="text" id="hiddenPrice" name="hiddenPrice" value="0"
+                        style="display: none;">
+
+                </fieldset>
+
+                <fieldset data-role="fieldcontain">
+                    <label for="service">Service Rating: </label>
+                    <select name="rservice" id="rservice" data-mini="true">
+                        <option value="improve">Need to improve</option>
+                        <option value="okay">OKAY</option>
+                        <option value="good">Good</option>
+                        <option value="excellent">Excellent</option>
+                    </select>
+                </fieldset>
+
+                <fieldset data-role="fieldcontain">
+                    <label for="clearnliness">Cleanliness Rating: </label>
+                    <select name="rcleanliness" id="rcleanliness" data-mini="true">
+                        <option value="improve">Need to improve</option>
+                        <option value="okay">OKAY</option>
+                        <option value="good">Good</option>
+                        <option value="excellent">Excellent</option>
+                    </select>
+                </fieldset>
+
+                <fieldset data-role="fieldcontain">
+                    <label for="quality">Food quality Rating: </label>
+                    <select name="rquality" id="rquality" data-mini="true">
+                        <option value="improve">Need to improve</option>
+                        <option value="okay">OKAY</option>
+                        <option value="good">Good</option>
+                        <option value="excellent">Excellent</option>
+                    </select>
+                </fieldset>
+
+                <fieldset data-role="fieldcontain">
+                    <label for="note">Add note(optional):</label>
+                    <textarea name="note" id ="rnote" cols="30" rows="10"></textarea>
+                </fieldset>
+
+                <fieldset data-role="fieldcontain">
+                    <label for="uname">Reporter Name:</label>
+                    <input type="text" name="uname" id="uname" placeholder="Your Name..." />
+                </fieldset>
+
+                <input style="width: 200px; margin: 20px auto;" class="ui-btn ui-shadow ui-corner-all" type="submit"
+                    id="submit" value="Submit" />
+            </form>
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+            <p style="text-align: center;">&copy; Copyright 2020</p>
+        </div>
+    </div>
+
+    <div data-role="page" id="info" data-theme="a">
+        <div data-role="header">
+            <a data-role="button" href="#list" data-icon="home" data-transition="slide" data-direction="reverse"
+                data-corners="false">Home</a>
+            <h1>
+                <img src="img/logo.png" alt="i-rate mobile" width="30" height="30"
+                    style="padding-right: 0.5em; vertical-align: middle;" />
+                Restaurant Info
+            </h1>
+        </div>
+
+        <div data-role="content">
+            <img id="ta-info-image" src="img/restaurant1.png" class="info-img-cover">
+            <div class="tablerow">
+                <div class="left-table">Name:</div>
+                <div class="right-table ta-info-res-name"></div>
+            </div>
+
+            <div class="tablerow">
+                <div class="left-table">Type:</div>
+                <div class="right-table ta-info-res-type"></div>
+            </div>
+
+            <div class="tablerow">
+                <div class="left-table">Day Visit:</div>
+                <div class="right-table ta-info-res-visit">9PM 14-11-2020</div>
+            </div>
+
+            <div class="tablerow">
+                <div class="left-table">Price:</div>
+                <div class="right-table ta-info-res-price"><i class='fa fa-dollar-sign fa-fw'
+                        style="color: #0ed41f">5</i></div>
+            </div>
+
+            <div class="tablerow">
+                <div class="left-table">Rating:</div>
+                <div class="right-table"><i class='fas fa-star ta-info-res-rating'></i></div>
+            </div>
+
+            <div data-role="collapsible">
+                <h3>Notes</h3>
+                <div id="ta-note-list">
+                    <label for="user1">User1</label>
+                    <textarea name="user1" id="user1" cols="20" rows="5" readonly>
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+                        aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
+                        aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                        occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                    </textarea>
+                </div>
+            </div>
+
+
+            <a data-role="button" href="#addnote" data-rel="popup" data-position-to="window" data-transition="pop"
+                data-icon="edit" style="width: 150px; margin: 20px auto;">Add Note</a>
+            <div data-role="popup" id="addnote" data-overlay-theme="a" data-theme="a" data-dismissible="false"
+                style="max-width:400px;">
+                <div data-role="header" data-theme="a">
+                    <h1>Add Note</h1>
+                </div>
+                <div role="main" class="ui-content">
+                    <form id="ta-noteForm" class="ui-title">
+                        <fieldset data-role="fieldcontain">
+                            <label for="uname">Reviewer Name:</label>
+                            <input type="text" name="user_name" placeholder="Reviewer Name..." />
+                        </fieldset>
+
+                        <fieldset data-role="fieldcontain">
+                            <label for="note">Add note:</label>
+                            <textarea name="note" cols="30" rows="10"></textarea>
+                        </fieldset>
+
+                        <input data-role="none" type="text" id="hiddenResId" name="hiddenResId" style="display: none;">
+
+                        <fieldset data-role="fieldcontain" class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <button class="ui-btn ui-shadow ui-corner-all" type="submit"
+                                    value="submit">Submit</button>
+                            </div>
+
+                            <div class="ui-block-b">
+                                <a data-role="button" href="#" data-rel="back">Cancel</a>
+                            </div>
+
+                        </fieldset>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+            <p style="text-align: center;">&copy; Copyright 2020</p>
+        </div>
+    </div>
+
+</body>
+
+</html>
