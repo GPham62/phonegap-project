@@ -217,6 +217,7 @@ $(document).ready(function () {
         let res_id = $("#hiddenResId").val()
         db.transaction(function (tx) {
             tx.executeSql(`delete from restaurants where restaurants.res_id=${res_id}`)
+            tx.executeSql(`delete from notes where notes.res_id=${res_id}`)
             deleteRes(res_id);
         }, errorCB, successCB)
     })
