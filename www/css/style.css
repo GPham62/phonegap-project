@@ -1,4 +1,4 @@
-textarea{
+textarea {
     height: 150px !important;
 }
 
@@ -85,6 +85,15 @@ label.error {
 .rating-stars ul>li.star.selected>i.fa {
     color: #0ed41f;
 }
+
+/* .ui-icon-note:after {
+    background-image: url("../img/noteIcon.png");
+    background-color: transparent;
+    box-shadow: none;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+} */
 
 .ui-icon-loading {
     background: url(http://code.jquery.com/mobile/1.1.0-rc.1/images/ajax-loader.png);

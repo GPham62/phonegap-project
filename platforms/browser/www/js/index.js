@@ -53,6 +53,7 @@ function toNumRating(stringRating) {
     }
 }
 function calculateRating({ service, cleanliness, quality }) {
+    console.log(service, cleanliness, quality);
     return Math.round((service + cleanliness + quality) / 3);
 }
 function takePhoto() {
@@ -196,14 +197,6 @@ $(document).ready(function () {
         var ratingValue = parseInt($('#prices li.selected').last().data('value'), 10);
 
         $("#hiddenPrice").attr('value', ratingValue);
-        // var msg = "";
-        // if (ratingValue > 1) {
-        //     msg = "Thanks! You rated this " + ratingValue + " stars.";
-        // }
-        // else {
-        //     msg = "We will improve ourselves. You rated this " + ratingValue + " stars.";
-        // }
-        // responseMessage(msg);
 
     });
 
@@ -265,8 +258,11 @@ $(document).ready(function () {
             var rname = $('#reviewForm input[name="rname"]').val();
             var rtype = $('#reviewForm select[name="rtype"]').val();
             var rservice = $('#reviewForm select[name="rservice"]').val();
+            console.log("rservice: " + rservice);
             var rcleanliness = $('#reviewForm select[name="rcleanliness"]').val();
+            console.log("rclean: " + rcleanliness);
             var rquality = $('#reviewForm select[name="rquality"]').val();
+            console.log("rquality: " + rquality);
             var note = $('textarea#rnote').val();
             var time = $('#reviewForm input[name="time"]').val();
             var date = $('#reviewForm input[name="date"]').val();
