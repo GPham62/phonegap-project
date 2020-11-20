@@ -211,6 +211,9 @@ $(document).ready(function () {
         for (i = 0; i < onPrice; i++) {
             $(prices[i]).addClass('selected');
         }
+        var ratingValue = parseInt($('#prices li.selected').last().data('value'), 10);
+
+        $("#hiddenPrice").attr('value', ratingValue);
     });
 
     //validator
@@ -251,6 +254,9 @@ $(document).ready(function () {
         for (i = 0; i < onPrice; i++) {
             $(prices[i]).addClass('selected');
         }
+        var ratingValue = parseInt($('#edit-prices li.selected').last().data('value'), 10);
+
+        $("#editHiddenPrice").attr('value', ratingValue);
     });
 
     $("#delResBtn").on("click", function () {
