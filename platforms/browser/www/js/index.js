@@ -106,7 +106,7 @@ $(document).ready(function () {
     //load all restaurants
     db.transaction(loadAllRestaurants, errorCB, successCB)
 
-    //get restaurant details
+    //render restaurant details
     $(document).on('pagebeforeshow', "#info", function (event, data) {
         let param = window.location.href.split("?")[1]
         let res_id = param.replace("parameter=", "");
@@ -134,6 +134,13 @@ $(document).ready(function () {
             })
         }, errorCB, successCB)
     });
+
+    //THÊM ĐOẠN NÀY LÀ K XOÁ ĐƯỢC
+    //render list restaurant
+    $(document).on('pagebeforeshow', "", function(event, data){
+        $("#ta-res-list").empty();
+        db.transaction(loadAllRestaurants, errorCB, successCB)
+    })
 
     $("#takepicture").on('click', function () {
         takePhoto();
@@ -175,7 +182,6 @@ $(document).ready(function () {
             return false;
         }
     });
-
 
     //star rating jquery
     /* 1. Visualizing things on Hover - See next part for action on click */
@@ -242,9 +248,8 @@ $(document).ready(function () {
         });
     });
 
-    /* 2. Action to perform on click */
     $('#edit-prices li').on('click', function () {
-        var onPrice = parseInt($(this).data('value'), 10); // The star currently selected
+        var onPrice = parseInt($(this).data('value'), 10); 
         var prices = $(this).parent().children('li.star');
 
         for (i = 0; i < prices.length; i++) {
