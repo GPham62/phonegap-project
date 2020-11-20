@@ -135,12 +135,12 @@ $(document).ready(function () {
         }, errorCB, successCB)
     });
 
-    //THÊM ĐOẠN NÀY LÀ K XOÁ ĐƯỢC
-    //render list restaurant
-    $(document).on('pagebeforeshow', "", function(event, data){
-        $("#ta-res-list").empty();
-        db.transaction(loadAllRestaurants, errorCB, successCB)
-    })
+    // //THÊM ĐOẠN NÀY LÀ K XOÁ ĐƯỢC
+    // //render list restaurant
+    // $(document).on('pagebeforeshow', "", function(event, data){
+    //     $("#ta-res-list").empty();
+    //     db.transaction(loadAllRestaurants, errorCB, successCB)
+    // })
 
     $("#takepicture").on('click', function () {
         takePhoto();
@@ -420,6 +420,8 @@ $(document).ready(function () {
                         reloadPage: true
  
                     });
+                    $("#ta-res-list").empty();
+                    db.transaction(loadAllRestaurants, errorCB, successCB)
                 })
             }, errorCB, successCB)
             return false;
