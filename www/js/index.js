@@ -3,7 +3,7 @@ function populateDB(tx) {
     tx.executeSql('DROP TABLE IF EXISTS restaurants');
     tx.executeSql('CREATE TABLE IF NOT EXISTS restaurants (res_id integer primary key not null, res_name text not null, type text, price integer, service text, cleanliness text, quality text, visited_time text, imageURI text)');
     //insert restaurant
-    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("res1", "type1", 1, "good", "good","excellent", "9PM 4/10/99", "img/restaurant1.png")');
+    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("res1", "type1", 1, "okay", "okay","okay", "9PM 4/10/99", "img/restaurant1.png")');
     tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("res2", "type2", 2, "good", "good","excellent", "9PM 4/10/99", "img/restaurant1.png")');
     tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("res3", "type3", 3, "good", "good","excellent", "9PM 4/10/99", "img/restaurant1.png")');
     //create note table
@@ -41,11 +41,11 @@ function loadAllRestaurants(tx) {
     })
 }
 function toNumRating(stringRating) {
-    if (stringRating == "Need to improve") {
+    if (stringRating == "improve") {
         return 1;
-    } else if (stringRating == "OKAY") {
+    } else if (stringRating == "okay") {
         return 2;
-    } else if (stringRating == "Good") {
+    } else if (stringRating == "good") {
         return 3;
     } else {
         return 4;
@@ -253,12 +253,6 @@ $(document).ready(function () {
         }
     });
 
-    //validator
-    $.validator.addMethod("editnotnull", function (value, element) {
-        var val = element.attributes["value"]["value"];
-        return this.optional(element) || val > 0;
-    }, "Price is required!");
-
     $("#delResBtn").on("click", function () {
         let res_id = $("#hiddenResId").val()
         db.transaction(function (tx) {
@@ -369,7 +363,7 @@ $(document).ready(function () {
                 required: true
             },
             editHiddenPrice: {
-                editnotnull: true
+                notnull: true
             },
         },
         messages: {
