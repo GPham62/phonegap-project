@@ -61,12 +61,17 @@ function readConfig(success, error) {
         }
     };
 
-    xhr = new XMLHttpRequest();
-    xhr.addEventListener("load", xhrStatusChangeHandler);
-
+    if ("ActiveXObject" in window) {
+        // Needed for XHR-ing via file:// protocol in IE
+        xhr = new window.ActiveXObject("MSXML2.XMLHTTP");
+        xhr.onreadystatechange = xhrStatusChangeHandler;
+    } else {
+        xhr = new XMLHttpRequest();
+        xhr.addEventListener("load", xhrStatusChangeHandler);
+    }
 
     try {
-        xhr.open("get", "config.xml", true);
+        xhr.open("get", "/config.xml", true);
         xhr.send();
     } catch(e) {
         fail('[Browser][cordova.js][readConfig] Could not XHR config.xml: ' + JSON.stringify(e));

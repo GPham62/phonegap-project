@@ -3,9 +3,9 @@ function populateDB(tx) {
     tx.executeSql('DROP TABLE IF EXISTS restaurants');
     tx.executeSql('CREATE TABLE IF NOT EXISTS restaurants (res_id integer primary key not null, res_name text not null, type text, price integer, service text, cleanliness text, quality text, visited_time text, imageURI text)');
     //insert restaurant
-    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("res1", "type1", 10, "good", "good","excellent", "9PM 4/10/99", "img/restaurant1.png")');
-    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("res2", "type2", 20, "good", "good","excellent", "9PM 4/10/99", "img/restaurant1.png")');
-    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("res3", "type3", 30, "good", "good","excellent", "9PM 4/10/99", "img/restaurant1.png")');
+    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("res1", "type1", 1, "good", "good","excellent", "9PM 4/10/99", "img/restaurant1.png")');
+    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("res2", "type2", 2, "good", "good","excellent", "9PM 4/10/99", "img/restaurant1.png")');
+    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("res3", "type3", 3, "good", "good","excellent", "9PM 4/10/99", "img/restaurant1.png")');
     //create note table
     tx.executeSql('DROP TABLE IF EXISTS notes');
     tx.executeSql('CREATE TABLE IF NOT EXISTS notes (note_id integer primary key not null,content text not null,user_name text not null, res_id integer not null, foreign key (res_id) references restaurants (res_id) on update cascade on delete cascade)');
@@ -23,7 +23,6 @@ function successCB() {
 }
 function loadAllRestaurants(tx) {
     tx.executeSql('select * from restaurants', [], function (t, rs) {
-        console.log(rs)
         let restaurantNum = rs.rows.length;
         let resArray = []
 
@@ -62,7 +61,6 @@ function takePhoto() {
     })
 }
 function onCameraSuccess(imageURI) {
-    console.log(imageURI)
     var img = document.getElementById('image');
     img.src = imageURI;
 }
@@ -92,7 +90,6 @@ function deleteRes(res_id) {
     a_resId.closest('li').remove();
 }
 function onSubmitNotes(db, user_name, note, res_id, note_id) {
-    console.log(user_name, note, res_id)
     db.transaction(function (tx) {
         tx.executeSql(`insert into notes(content, user_name, res_id) values ("${note}", "${user_name}", "${res_id}")`)
         appendNewNote(null, user_name, note)
@@ -124,7 +121,7 @@ $(document).ready(function () {
                         $("#ta-info-image").attr("src", imageURI)
                         $('.ta-info-res-name').text(res_name)
                         $('.ta-info-res-type').text(type)
-                        $('.ta-info-res-price').text(price)
+                        $('.ta-info-res-price').text(`${price}/5`)
                         $('.ta-info-res-rating').text(rating)
                         $('.ta-info-res-visit').text(visited_time)
                         $('#hiddenResId').val(res_id)
@@ -142,20 +139,43 @@ $(document).ready(function () {
         takePhoto();
     })
 
-    $("#ta-noteForm").submit(function (e) {
-        e.preventDefault()
-        let user_name = e.target.user_name.value
-        let note = e.target.note.value
-        let res_id = $("#hiddenResId").val()
-        onSubmitNotes(db, user_name, note, res_id)
-        $(':input', '#ta-noteForm')
-            .not(':button, :submit, :reset, :hidden')
-            .val('')
-            .prop('checked', false)
-            .prop('selected', false);
-        $("#ta-noteForm-close").trigger("click");
-        // window.location.href = "#info"
-    })
+    $("#ta-noteForm").validate({
+        ignore: [],
+        rules:
+        {
+            user_name: {
+                required: true
+            },
+            note: {
+                required: true
+            }
+        },
+        messages: {
+            user_name: {
+                required: "Required!",
+            },
+            note: {
+                required: "Required!",
+            }
+        },
+        errorPlacement: function (err, element) {
+            err.insertAfter(element.parent());
+        },
+        submitHandler: function (form) {   
+            let user_name = $('#ta-noteForm input[name="user_name"]').val();
+            let note = $('#ta-noteForm textarea[name="note"]').val();
+            let res_id = $("#hiddenResId").val()
+            onSubmitNotes(db, user_name, note, res_id)
+            $(':input', '#ta-noteForm')
+                .not(':button, :submit, :reset, :hidden')
+                .val('')
+                .prop('checked', false)
+                .prop('selected', false);
+            $("#ta-noteForm-close").trigger("click");
+            return false;
+        }
+    });
+
 
     //star rating jquery
     /* 1. Visualizing things on Hover - See next part for action on click */
@@ -191,24 +211,50 @@ $(document).ready(function () {
         for (i = 0; i < onPrice; i++) {
             $(prices[i]).addClass('selected');
         }
-
-        // JUST RESPONSE (Not needed)
-        var ratingValue = parseInt($('#prices li.selected').last().data('value'), 10);
-
-        $("#hiddenPrice").attr('value', ratingValue);
-        // var msg = "";
-        // if (ratingValue > 1) {
-        //     msg = "Thanks! You rated this " + ratingValue + " stars.";
-        // }
-        // else {
-        //     msg = "We will improve ourselves. You rated this " + ratingValue + " stars.";
-        // }
-        // responseMessage(msg);
-
     });
 
     //validator
     $.validator.addMethod("notnull", function (value, element) {
+        var val = element.attributes["value"]["value"];
+        return this.optional(element) || val > 0;
+    }, "Price is required!");
+
+
+    $('#edit-prices li').on('mouseover', function () {
+        var onPrice = parseInt($(this).data('value'), 10); // The star currently mouse on
+
+        // Now highlight all the stars that's not after the current hovered star
+        $(this).parent().children('li.star').each(function (e) {
+            if (e < onPrice) {
+                $(this).addClass('hover');
+            }
+            else {
+                $(this).removeClass('hover');
+            }
+        });
+
+    }).on('mouseout', function () {
+        $(this).parent().children('li.star').each(function (e) {
+            $(this).removeClass('hover');
+        });
+    });
+
+    /* 2. Action to perform on click */
+    $('#edit-prices li').on('click', function () {
+        var onPrice = parseInt($(this).data('value'), 10); // The star currently selected
+        var prices = $(this).parent().children('li.star');
+
+        for (i = 0; i < prices.length; i++) {
+            $(prices[i]).removeClass('selected');
+        }
+
+        for (i = 0; i < onPrice; i++) {
+            $(prices[i]).addClass('selected');
+        }
+    });
+
+    //validator
+    $.validator.addMethod("editnotnull", function (value, element) {
         var val = element.attributes["value"]["value"];
         return this.optional(element) || val > 0;
     }, "Price is required!");
@@ -221,7 +267,6 @@ $(document).ready(function () {
             deleteRes(res_id);
         }, errorCB, successCB)
     })
-
 
     $("#reviewForm").validate({
         ignore: [],
@@ -303,6 +348,75 @@ $(document).ready(function () {
                     window.location.href = "#list"
                 }, errorCB, successCB)
             })
+            return false;
+        }
+    });
+
+    $("#ta-editForm").validate({
+        ignore: [],
+        rules:
+        {
+            uname: {
+                required: true
+            },
+            rname: {
+                required: true
+            },
+            time: {
+                required: true
+            },
+            date: {
+                required: true
+            },
+            editHiddenPrice: {
+                editnotnull: true
+            },
+        },
+        messages: {
+            uname: {
+                required: "Reviewer name is required!",
+            },
+            rname: {
+                required: "Restaurant name is required!",
+            },
+            time: {
+                required: "Time is required!",
+            },
+            date: {
+                required: "Date is required!",
+            }
+        },
+        errorPlacement: function (err, element) {
+            err.insertAfter(element.parent());
+        },
+        submitHandler: function (form) {
+            var rname = $('#ta-editForm input[name="rname"]').val();
+            var rtype = $('#ta-editForm select[name="rtype"]').val();
+            var rservice = $('#ta-editForm select[name="rservice"]').val();
+            var rcleanliness = $('#ta-editForm select[name="rcleanliness"]').val();
+            var rquality = $('#ta-editForm select[name="rquality"]').val();
+            var time = $('#ta-editForm input[name="time"]').val();
+            var date = $('#ta-editForm input[name="date"]').val();
+            var price = parseInt($('#edit-prices li.selected').last().data('value'), 10);
+            var res_id = $('#hiddenResId').val()
+           
+            db.transaction(function (tx) {
+                tx.executeSql(`update restaurants set res_name="${rname}", type="${rtype}", price="${price}", service="${rservice}", cleanliness="${rcleanliness}", quality="${rquality}", visited_time="${time+" "+date}" where res_id=${res_id}`, [], function (tx, rs) {
+                    $(':input', '#ta-editForm')
+                    .not(':button, :submit, :reset, :hidden')
+                    .val('')
+                    .prop('checked', false)
+                    .prop('selected', false);
+                    $("#ta-editForm-close").trigger("click");
+                    $.mobile.changePage(`#info`, { 
+                        dataUrl: `/#info?parameter=${res_id}`,
+                        allowSamePageTransition: true,
+                        transition: 'none',
+                        reloadPage: true
+ 
+                    });
+                })
+            }, errorCB, successCB)
             return false;
         }
     });

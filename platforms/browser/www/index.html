@@ -195,6 +195,122 @@
 
         <div data-role="content">
             <img id="ta-info-image" src="img/restaurant1.png" class="info-img-cover">
+            <a data-role="button" href="#edit-res" data-rel="popup"
+                class="ui-btn ui-shadow ui-corner-all ui-icon-edit ui-btn-icon-notext">Edit</a>
+            <div data-role="popup" id="edit-res" data-overlay-theme="a" data-theme="a" data-dismissible="false"
+                style="max-width:400px;" data-position-to="window">
+                <div data-role="header" data-theme="a">
+                    <h1>Edit restaurant's details</h1>
+                </div>
+                <div role="main" class="ui-content">
+                    <form id="ta-editForm" class="ui-title">
+                        <fieldset data-role="fieldcontain">
+                            <label for="edit-rname">Restaurant Name:</label>
+                            <input type="text" name="rname" id="edit-rname" placeholder="Restaurant Name..." />
+                        </fieldset>
+
+                        <fieldset data-role="fieldcontain">
+                            <label for="edit-rtype" class="select">Restaurant Type:</label>
+                            <select name="rtype" id="edit-rtype" data-mini="true">
+                                <option value="fastfood">Fast food</option>
+                                <option value="grill">Grill</option>
+                                <option value="seafood">Sea Food</option>
+                            </select>
+                        </fieldset>
+
+                        <fieldset data-role="fieldcontain" class="ui-grid-c">
+                            <div class="ui-block-a" style="width: 40%">
+                                <label for="edit-time">Time:</label>
+                                <input type="time" name="time" id="edit-time" />
+                            </div>
+
+                            <div class="ui-block-b" style="width: 20%">
+
+                            </div>
+
+                            <div class="ui-block-c" style="width: 40%">
+                                <label for="edit-date">Date:</label>
+                                <input type="date" name="date" id="edit-date" />
+                            </div>
+                        </fieldset>
+
+                        <fieldset data-role="fieldcontain">
+                            <label for="edit-prices">Price:</label>
+
+                            <!-- Rating Stars Box -->
+                            <div class='rating-stars text-center'>
+                                <ul id='edit-prices'>
+                                    <li class='star' title='Poor' data-value='1'>
+                                        <i class='fa fa-dollar-sign fa-fw'></i>
+                                    </li>
+                                    <li class='star' title='Fair' data-value='2'>
+                                        <i class='fa fa-dollar-sign fa-fw'></i>
+                                    </li>
+                                    <li class='star' title='Good' data-value='3'>
+                                        <i class='fa fa-dollar-sign fa-fw'></i>
+                                    </li>
+                                    <li class='star' title='Excellent' data-value='4'>
+                                        <i class='fa fa-dollar-sign fa-fw'></i>
+                                    </li>
+                                    <li class='star' title='WOW!!!' data-value='5'>
+                                        <i class='fa fa-dollar-sign fa-fw'></i>
+                                    </li>
+                                </ul>
+                            </div>
+                            <input data-role="none" type="text" id="editHiddenPrice" name="editHiddenPrice" value="0"
+                                style="display: none;">
+
+                        </fieldset>
+
+                        <fieldset data-role="fieldcontain">
+                            <label for="edit-service">Service Rating: </label>
+                            <select name="rservice" id="edit-rservice" data-mini="true">
+                                <option value="improve">Need to improve</option>
+                                <option value="okay">OKAY</option>
+                                <option value="good">Good</option>
+                                <option value="excellent">Excellent</option>
+                            </select>
+                        </fieldset>
+
+                        <fieldset data-role="fieldcontain">
+                            <label for="edit-clearnliness">Cleanliness Rating: </label>
+                            <select name="rcleanliness" id="edit-rcleanliness" data-mini="true">
+                                <option value="improve">Need to improve</option>
+                                <option value="okay">OKAY</option>
+                                <option value="good">Good</option>
+                                <option value="excellent">Excellent</option>
+                            </select>
+                        </fieldset>
+
+                        <fieldset data-role="fieldcontain">
+                            <label for="edit-quality">Food quality Rating: </label>
+                            <select name="rquality" id="edit-rquality" data-mini="true">
+                                <option value="improve">Need to improve</option>
+                                <option value="okay">OKAY</option>
+                                <option value="good">Good</option>
+                                <option value="excellent">Excellent</option>
+                            </select>
+                        </fieldset>
+
+                        <fieldset data-role="fieldcontain">
+                            <label for="edit-uname">Reporter Name:</label>
+                            <input type="text" name="uname" id="edit-uname" placeholder="Your Name..." />
+                        </fieldset>
+
+                        <fieldset data-role="fieldcontain" class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <button class="ui-btn ui-shadow ui-corner-all" type="submit"
+                                    value="submit">Submit</button>
+                            </div>
+
+                            <div class="ui-block-b">
+                                <a data-role="button" id="ta-editForm-close" href="#" data-rel="back">Cancel</a>
+                            </div>
+
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
             <div class="tablerow">
                 <div class="left-table">Name:</div>
                 <div class="right-table ta-info-res-name"></div>
