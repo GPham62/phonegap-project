@@ -135,13 +135,6 @@ $(document).ready(function () {
         }, errorCB, successCB)
     });
 
-    // //THÊM ĐOẠN NÀY LÀ K XOÁ ĐƯỢC
-    // //render list restaurant
-    // $(document).on('pagebeforeshow', "", function(event, data){
-    //     $("#ta-res-list").empty();
-    //     db.transaction(loadAllRestaurants, errorCB, successCB)
-    // })
-
     $("#takepicture").on('click', function () {
         takePhoto();
     })
@@ -413,13 +406,13 @@ $(document).ready(function () {
                     .prop('checked', false)
                     .prop('selected', false);
                     $("#ta-editForm-close").trigger("click");
-                    $.mobile.changePage(`#info`, { 
-                        dataUrl: `/#info?parameter=${res_id}`,
-                        allowSamePageTransition: true,
-                        transition: 'none',
-                        reloadPage: true
- 
-                    });
+                 
+                    $('.ta-info-res-name').text(rname)
+                    $('.ta-info-res-type').text(rtype)
+                    $('.ta-info-res-price').text(`${price}/5`)
+                    $('.ta-info-res-rating').text(calculateRating({ service: toNumRating(rservice), cleanliness: toNumRating(rcleanliness), quality: toNumRating(rquality)}))
+                    $('.ta-info-res-visit').text(`${time + " " +date}`)
+                    
                     $("#ta-res-list").empty();
                     db.transaction(loadAllRestaurants, errorCB, successCB)
                 })
