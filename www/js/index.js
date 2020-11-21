@@ -21,25 +21,34 @@ function errorCB(tx, err) {
 function successCB() {
 
 }
+//sửa tên hàm, tên biến
 function loadAllRestaurants(tx) {
     tx.executeSql('select * from restaurants', [], function (t, rs) {
         let restaurantNum = rs.rows.length;
         let resArray = []
 
+        //đổi forEach
         for (let i = 0; i < restaurantNum; i++) {
             let { res_id, res_name, service, quality, cleanliness, imageURI } = rs.rows.item(i);
             let rating = calculateRating({ service: toNumRating(service), cleanliness: toNumRating(cleanliness), quality: toNumRating(quality) })
             resArray.push(rs.rows.item(i))
-            appendNewRes(res_id, res_name, rating, imageURI)
+
+            //không gọi hàm tự viết ra
+            appendNewRes(res_id, res_name, imageURI)
         }
+
+        //đổi ta-res-list
         $("#ta-res-list").listview('refresh')
 
+        //đổi ta-slide-btn
         $(".ta-slide-btn").on('click', function (e) {
             let res_id = $(this).attr('res-id')
+            //đổi parameter thành res_id
             $.mobile.changePage('#info', { dataUrl: `/#info?parameter=${res_id}` });
         })
     })
 }
+//sửa hết: tên biến, tên hàm, switch
 function toNumRating(stringRating) {
     if (stringRating == "improve") {
         return 1;
@@ -51,6 +60,7 @@ function toNumRating(stringRating) {
         return 4;
     }
 }
+//sửa hết: tên biến, tên hàm, truyền param, viết dài ra, đổi round thành cái khác 
 function calculateRating({ service, cleanliness, quality }) {
     return Math.round((service + cleanliness + quality) / 3);
 }
@@ -73,15 +83,13 @@ function appendNewNote(note_id, user_name, content) {
         `<textarea name="user1" id=${note_id} cols="20" rows="5" readonly>${content}</textarea>`
     )
 }
-function appendNewRes(res_id, res_name, rating, imageURI) {
+function appendNewRes(res_id, res_name, imageURI) {
     $("#ta-res-list").append(
         '<li data-theme="c">' +
         `<a class=ta-slide-btn data-transition="slide" res-id=${res_id}>` +
         `<img src=${imageURI}>` +
         `<h2>${res_name}</h2>` +
-        `<p>Rating: <i class="fas fa-star">${rating}</i></p>` +
-        '</a>' +
-        `<a class=ta-slide-btn data-transition="slide" res-id=${res_id}></a>` +
+        '</a>'+
         '</li>'
     )
 }
@@ -266,20 +274,21 @@ $(document).ready(function () {
         }, errorCB, successCB)
     })
 
+    //sửa toàn bộ
     $("#reviewForm").validate({
         ignore: [],
         rules:
         {
-            uname: {
+            reviewerName: {
                 required: true
             },
-            rname: {
+            restaurantName: {
                 required: true
             },
-            time: {
+            visitTime: {
                 required: true
             },
-            date: {
+            visitDate: {
                 required: true
             },
             hiddenPrice: {
@@ -287,60 +296,66 @@ $(document).ready(function () {
             },
         },
         messages: {
-            uname: {
-                required: "Reviewer name is required!",
+            reviewerName: {
+                required: "Your name required!",
             },
-            rname: {
-                required: "Restaurant name is required!",
+            restaurantName: {
+                required: "Restaurant name required!",
             },
-            time: {
-                required: "Time is required!",
+            visitTime: {
+                required: "Visit time required!",
             },
-            date: {
-                required: "Date is required!",
+            visitDate: {
+                required: "Visit date required!",
             }
         },
         errorPlacement: function (err, element) {
             err.insertAfter(element.parent());
         },
         submitHandler: function (form) {
-            var uname = $('#reviewForm input[name="uname"]').val();
-            var rname = $('#reviewForm input[name="rname"]').val();
-            var rtype = $('#reviewForm select[name="rtype"]').val();
-            var rservice = $('#reviewForm select[name="rservice"]').val();
+            var reviewerName = $('#reviewForm input[name="reviewerName"]').val();
+            var restaurantName = $('#reviewForm input[name="restaurantName"]').val();
+            var restaurantType = $('#reviewForm select[name="restaurantType"]').val();
+            var restaurantService = $('#reviewForm select[name="restaurantService"]').val();
             var rcleanliness = $('#reviewForm select[name="rcleanliness"]').val();
             var rquality = $('#reviewForm select[name="rquality"]').val();
             var note = $('textarea#rnote').val();
-            var time = $('#reviewForm input[name="time"]').val();
-            var date = $('#reviewForm input[name="date"]').val();
+            var visitTime = $('#reviewForm input[name="visitTime"]').val();
+            var visitDate = $('#reviewForm input[name="visitDate"]').val();
             var price = parseInt($('#prices li.selected').last().data('value'), 10);
             var imageURI = $("#image").attr('src')
 
             let newResId;
 
             db.transaction(function (tx) {
-                tx.executeSql(`insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("${rname}", "${rtype}", "${price}", "${rservice}", "${rcleanliness}","${rquality}", "${time + " " + date}", "${imageURI}")`, [], function (tx, rs) {
+                tx.executeSql(`insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("${restaurantName}", "${restaurantType}", "${price}", "${restaurantService}", "${rcleanliness}","${rquality}", "${visitTime + " " + visitDate}", "${imageURI}")`, [], function (tx, rs) {
                     newResId = rs.insertId
                 })
             }, errorCB, function () {
                 db.transaction(function (tx) {
                     if (note != '') {
-                        tx.executeSql(`insert into notes(content, user_name, res_id) values ("${note}", "${uname}", ${newResId})`)
+                        tx.executeSql(`insert into notes(content, user_name, res_id) values ("${note}", "${reviewerName}", ${newResId})`)
                     }
-                    let rating = calculateRating({ service: toNumRating(rservice), cleanliness: toNumRating(rcleanliness), quality: toNumRating(rquality) })
-                    appendNewRes(newResId, rname, rating, imageURI)
+                    //không gọi hàm 
+                    appendNewRes(newResId, restaurantName, imageURI)
+
+
                     $('#ta-res-list').listview("refresh")
 
                     $(".ta-slide-btn").on('click', function (e) {
                         let res_id = $(this).attr('res-id')
+                        //dổi parameter thành res_id, #info thành details
                         $.mobile.changePage('#info', { dataUrl: `/#info?parameter=${res_id}` });
                     })
 
+                    //empty từng input một
                     $(':input', '#review')
                         .not(':button, :submit, :reset')
                         .val('')
                         .prop('checked', false)
                         .prop('selected', false);
+
+                    //đổi tên src image
                     $("#image").attr("src", "img/no-image.png")
 
                     window.location.href = "#list"

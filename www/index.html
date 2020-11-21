@@ -21,26 +21,16 @@
 <body>
 
     <div data-role="page" id="list">
-        <div data-role="header" data-theme="a">
-            <h1><img src="img/logo.png" alt="i-rate mobile" width="30" height="30"
-                    style="padding-right: 0.5em; vertical-align: middle;" />Restaurant List</h1>
+        <div data-role="header" data-theme="b">
+            <h1>Restaurant List</h1>
         </div>
 
         <div data-role="content">
-            <div data-role="fieldcontain" class="ui-grid-c">
-                <div class="ui-block-a" style="width: 30%">
-                    <a data-theme="d" data-corners="false" data-role="button" data-transition="flip" href="#review">
-                        <img src="img/good-review.png" alt="rss" width="32" height="32"
-                            style="display: block; margin: 0 auto">
-                        Review
-                    </a>
-                </div>
-                <div class="ui-block-b" style="width: 20%"></div>
-                <div class="ui-block-c" style="width: 50%">
-                    <form class="ui-filterable">
-                        <input id="filterBasic-input" data-type="search">
-                    </form>
-                </div>
+            <div data-role="fieldcontain">
+                <form class="ui-filterable">
+                    <input id="filterBasic-input" data-type="search" placeholder="Search a restarant by name and rating">
+                </form>
+
             </div>
 
             <div data-role="fieldcontain">
@@ -49,15 +39,26 @@
                 </ul>
             </div>
 
+            <div data-role="fieldcontain" class="ui-grid-b">
+                <div class="ui-block-a" style="width: 50%"></div>
+                <div class="ui-block-b" style="width: 50%">
+                    <!-- <a data-theme="d" data-corners="false" data-role="button" data-transition="flip" href="#review">
+                        <img src="img/good-review.png" alt="rss" width="32" height="32"
+                            style="display: block; margin: 0 auto">
+                        Review
+                    </a> -->
+                    <a data-role="button" data-icon="plus" href="#review">New review</a>
+                </div>
+            </div>
         </div>
 
-        <div data-role="footer" data-position="fixed">
+        <div data-role="footer" data-position="fixed" data-theme="b">
             <p style="text-align: center;">&copy; Copyright 2020</p>
         </div>
     </div>
 
     <div data-role="page" id="review">
-        <div data-role="header" data-theme="a">
+        <div data-role="header" data-theme="b">
             <a data-role="button" href="#list" data-icon="home" data-transition="turn" data-corners="false">Home</a>
             <h1>
                 <img src="img/logo.png" alt="i-rate mobile" width="30" height="30"
@@ -75,13 +76,13 @@
                     <img style="width:80%;height:200px; margin: auto" id="image" src="img/no-image.png" />
                 </fieldset>
                 <fieldset data-role="fieldcontain">
-                    <label for="rname">Restaurant Name:</label>
-                    <input type="text" name="rname" id="rname" placeholder="Restaurant Name..." />
+                    <label for="restaurantName">Restaurant Name:</label>
+                    <input type="text" name="restaurantName" id="restaurantName" placeholder="Restaurant name" />
                 </fieldset>
 
                 <fieldset data-role="fieldcontain">
-                    <label for="rtype" class="select">Restaurant Type:</label>
-                    <select name="rtype" id="rtype" data-mini="true">
+                    <label for="restaurantType" class="select">Restaurant Type:</label>
+                    <select name="restaurantType" id="restaurantType" data-mini="true">
                         <option value="fastfood">Fast food</option>
                         <option value="grill">Grill</option>
                         <option value="seafood">Sea Food</option>
@@ -90,8 +91,8 @@
 
                 <fieldset data-role="fieldcontain" class="ui-grid-c">
                     <div class="ui-block-a" style="width: 40%">
-                        <label for="time">Time:</label>
-                        <input type="time" name="time" id="time" />
+                        <label for="visitTime">Visit Time:</label>
+                        <input type="time" name="visitTime" id="visitTime" />
                     </div>
 
                     <div class="ui-block-b" style="width: 20%">
@@ -99,8 +100,8 @@
                     </div>
 
                     <div class="ui-block-c" style="width: 40%">
-                        <label for="date">Date:</label>
-                        <input type="date" name="date" id="date" />
+                        <label for="visitDate">Visit Date:</label>
+                        <input type="date" name="visitDate" id="visitDate" />
                     </div>
                 </fieldset>
 
@@ -133,8 +134,8 @@
                 </fieldset>
 
                 <fieldset data-role="fieldcontain">
-                    <label for="service">Service Rating: </label>
-                    <select name="rservice" id="rservice" data-mini="true">
+                    <label for="restaurantService">Restaurant Service Rating: </label>
+                    <select name="restaurantService" id="restaurantService" data-mini="true">
                         <option value="improve">Need to improve</option>
                         <option value="okay">OKAY</option>
                         <option value="good">Good</option>
@@ -143,8 +144,8 @@
                 </fieldset>
 
                 <fieldset data-role="fieldcontain">
-                    <label for="clearnliness">Cleanliness Rating: </label>
-                    <select name="rcleanliness" id="rcleanliness" data-mini="true">
+                    <label for="restaurantClean">Restaurant Cleanliness Rating: </label>
+                    <select name="restaurantClean" id="restaurantClean" data-mini="true">
                         <option value="improve">Need to improve</option>
                         <option value="okay">OKAY</option>
                         <option value="good">Good</option>
@@ -168,8 +169,8 @@
                 </fieldset>
 
                 <fieldset data-role="fieldcontain">
-                    <label for="uname">Reporter Name:</label>
-                    <input type="text" name="uname" id="uname" placeholder="Your Name..." />
+                    <label for="reviewerName">Reviewer Name:</label>
+                    <input type="text" name="reviewerName" id="reviewerName" placeholder="Your Name" />
                 </fieldset>
 
                 <input style="width: 200px; margin: 20px auto;" class="ui-btn ui-shadow ui-corner-all" type="submit"
@@ -177,26 +178,39 @@
             </form>
         </div>
 
-        <div data-role="footer" data-position="fixed">
+        <div data-role="footer" data-position="fixed" data-theme="b">
             <p style="text-align: center;">&copy; Copyright 2020</p>
         </div>
     </div>
 
     <div data-role="page" id="info" data-theme="a">
-        <div data-role="header">
+        <div data-role="header" data-theme="b">
             <a data-role="button" href="#list" data-icon="home" data-transition="slide" data-direction="reverse"
-                data-corners="false">Home</a>
+                data-corners="false" data-iconpos="notext">Home</a>
             <h1>
-                <img src="img/logo.png" alt="i-rate mobile" width="30" height="30"
-                    style="padding-right: 0.5em; vertical-align: middle;" />
                 Restaurant Info
             </h1>
         </div>
 
         <div data-role="content">
             <img id="ta-info-image" src="img/restaurant1.png" class="info-img-cover">
-            <a data-role="button" href="#edit-res" data-rel="popup"
+
+            <div data-role="fieldcontain" class="ui-grid-c">
+                <div class="ui-block-a" style ="width: 33%">
+                    <a data-role="button" href="#addnote" data-rel="popup" data-position-to="window" data-transition="pop"
+                    data-icon="edit">Add Note</a>
+                </div>
+                <div class="ui-block-b" style ="width: 33%">
+                               <a data-role="button" href="#edit-res" data-rel="popup"
                 class="ui-btn ui-shadow ui-corner-all ui-icon-edit ui-btn-icon-notext">Edit</a>
+                </div>
+                <div class="ui-block-c" style ="width: 33%">
+                    <a data-role="button" href="#deleteres" data-rel="popup" data-position-to="window" data-icon="delete"
+                    data-theme="b" data-transition="pop">Delete
+                    Restaurant</a>
+                </div>
+            </div>
+
             <div data-role="popup" id="edit-res" data-overlay-theme="a" data-theme="a" data-dismissible="false"
                 style="max-width:400px;" data-position-to="window">
                 <div data-role="header" data-theme="a">
@@ -350,10 +364,6 @@
                 </div>
             </div>
 
-
-            <a data-role="button" href="#addnote" data-rel="popup" data-position-to="window" data-transition="pop"
-                data-icon="edit" style="width: 150px; margin: 20px auto;">Add Note</a>
-
             <div data-role="popup" id="addnote" data-overlay-theme="a" data-theme="a" data-dismissible="false"
                 style="max-width:400px;">
                 <div data-role="header" data-theme="a">
@@ -388,9 +398,7 @@
                 </div>
 
             </div>
-            <a data-role="button" href="#deleteres" data-rel="popup" data-position-to="window" data-icon="delete"
-                data-theme="b" data-transition="pop" style="width: 150px; margin: 20px auto;">Delete
-                Restaurant</a>
+    
             <div data-role="popup" id="deleteres" data-overlay-theme="b" data-theme="b" data-dismissible="false"
                 style="max-width:400px;">
                 <div data-role="header" data-theme="a">
@@ -406,7 +414,7 @@
             </div>
         </div>
 
-        <div data-role="footer" data-position="fixed">
+        <div data-role="footer" data-position="fixed" data-theme="b">
             <p style="text-align: center;">&copy; Copyright 2020</p>
         </div>
     </div>
