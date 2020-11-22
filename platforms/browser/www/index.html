@@ -62,7 +62,7 @@
         </div>
 
         <div data-role="content">
-            <form id="reviewForm">
+            <form id="newResForm">
 
                 <fieldset data-role="fieldcontain" class="ui-hide-label">
                     <label for="reviewerName">Reviewer Name:</label>
@@ -98,9 +98,9 @@
                     <label for="restaurantPrice">Price:</label>
                     <select name="restaurantPrice" id="restaurantPrice" data-mini="true">
                         <option  value="default" selected>Price:</option>
-                        <option value="fastfood">Low</option>
-                        <option value="grill">Average</option>
-                        <option value="seafood">High</option>
+                        <option value="low">Low</option>
+                        <option value="average">Average</option>
+                        <option value="high">High</option>
                     </select>
                    
                 </fieldset>
@@ -169,7 +169,7 @@
         </div>
 
         <div data-role="content">
-            <img id="ta-info-image" src="img/res1.png" class="info-img-cover">
+            <img id="res-img" src="img/res1.png" class="info-img-cover">
 
             <div data-role="fieldcontain" class="ui-grid-c">
                 <div class="ui-block-a" style="width: 33%">
@@ -192,15 +192,15 @@
                     <h1>Edit restaurant's details</h1>
                 </div>
                 <div role="main" class="ui-content">
-                    <form id="ta-editForm" class="ui-title">
+                    <form id="updateResForm" class="ui-title">
                         <fieldset data-role="fieldcontain">
                             <label for="edit-rname">Restaurant Name:</label>
-                            <input type="text" name="rname" id="edit-rname" placeholder="Restaurant Name..." />
+                            <input type="text" name="restaurantName" id="edit-rname" placeholder="Restaurant Name..." />
                         </fieldset>
 
                         <fieldset data-role="fieldcontain">
                             <label for="edit-rtype" class="select">Restaurant Type:</label>
-                            <select name="rtype" id="edit-rtype" data-mini="true">
+                            <select name="restaurantType" id="edit-rtype" data-mini="true">
                                 <option  value="default" selected>Type:</option>
                                 <option value="fastfood">Fast food</option>
                                 <option value="grill">Grill</option>
@@ -238,7 +238,7 @@
 
                         <fieldset data-role="fieldcontain">
                             <label for="edit-service">Service Rating: </label>
-                            <select name="rservice" id="edit-rservice" data-mini="true">
+                            <select name="restaurantService" id="edit-rservice" data-mini="true">
                                 <option  value="default" selected>Service:</option>
                                 <option value="improve">Need to improve</option>
                                 <option value="okay">OKAY</option>
@@ -249,7 +249,7 @@
 
                         <fieldset data-role="fieldcontain">
                             <label for="edit-clearnliness">Cleanliness Rating: </label>
-                            <select name="rcleanliness" id="edit-rcleanliness" data-mini="true">
+                            <select name="restaurantClean" id="edit-rcleanliness" data-mini="true">
                                 <option  value="default" selected>Cleanliness:</option>
                                 <option value="improve">Need to improve</option>
                                 <option value="okay">OKAY</option>
@@ -260,7 +260,7 @@
 
                         <fieldset data-role="fieldcontain">
                             <label for="edit-quality">Food quality Rating: </label>
-                            <select name="rquality" id="edit-rquality" data-mini="true">
+                            <select name="foodQuality" id="edit-rquality" data-mini="true">
                                 <option  value="default" selected>Food Quality:</option>
                                 <option value="improve">Need to improve</option>
                                 <option value="okay">OKAY</option>
@@ -281,7 +281,7 @@
                             </div>
 
                             <div class="ui-block-b">
-                                <a data-role="button" id="ta-editForm-close" href="#" data-rel="back">Cancel</a>
+                                <a data-role="button" id="updateResForm-close" href="#" data-rel="back">Cancel</a>
                             </div>
 
                         </fieldset>
@@ -316,7 +316,7 @@
 
             <div data-role="collapsible">
                 <h3>Notes</h3>
-                <div id="ta-note-list">
+                <div id="noteList">
                     <label for="user1">User1</label>
                     <textarea name="user1" id="user1" cols="40" rows="5" readonly>
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
@@ -333,18 +333,18 @@
                     <h1>Add Note</h1>
                 </div>
                 <div role="main" class="ui-content">
-                    <form id="ta-noteForm" class="ui-title">
+                    <form id="newNoteForm" class="ui-title">
                         <fieldset data-role="fieldcontain">
                             <label for="uname">Reviewer Name:</label>
-                            <input type="text" name="user_name" placeholder="Reviewer Name..." />
+                            <input type="text" name="reviewerName" placeholder="Reviewer Name..." />
                         </fieldset>
 
                         <fieldset data-role="fieldcontain">
                             <label for="note">Add note:</label>
-                            <textarea name="note" cols="30" rows="10"></textarea>
+                            <textarea name="note" cols="30" rows="10" id="new-note-textarea"></textarea>
                         </fieldset>
 
-                        <input data-role="none" type="text" id="hiddenResId" name="hiddenResId" style="display: none;">
+                        <input data-role="none" type="text" id="currentResId" name="currentResId" style="display: none;">
 
                         <fieldset data-role="fieldcontain" class="ui-grid-a">
                             <div class="ui-block-a">
@@ -353,7 +353,7 @@
                             </div>
 
                             <div class="ui-block-b">
-                                <a data-role="button" id="ta-noteForm-close" href="#" data-rel="back">Cancel</a>
+                                <a data-role="button" id="newNoteForm-close" href="#" data-rel="back">Cancel</a>
                             </div>
 
                         </fieldset>
