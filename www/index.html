@@ -28,7 +28,8 @@
         <div data-role="content">
             <div data-role="fieldcontain">
                 <form class="ui-filterable">
-                    <input id="filterBasic-input" data-type="search" placeholder="Search a restarant by name and rating">
+                    <input id="filterBasic-input" data-type="search"
+                        placeholder="Search a restarant by name and rating">
                 </form>
 
             </div>
@@ -40,14 +41,9 @@
             </div>
 
             <div data-role="fieldcontain" class="ui-grid-b">
-                <div class="ui-block-a" style="width: 50%"></div>
-                <div class="ui-block-b" style="width: 50%">
-                    <!-- <a data-theme="d" data-corners="false" data-role="button" data-transition="flip" href="#review">
-                        <img src="img/good-review.png" alt="rss" width="32" height="32"
-                            style="display: block; margin: 0 auto">
-                        Review
-                    </a> -->
-                    <a data-role="button" data-icon="plus" href="#review">New review</a>
+                <div class="ui-block-a" style="width: 65%"></div>
+                <div class="ui-block-b" style="width: 35%">
+                    <a class="ui-btn ui-btn-inline ui-icon-plus ui-btn-icon-top" href="#review">New review</a>
                 </div>
             </div>
         </div>
@@ -61,21 +57,19 @@
         <div data-role="header" data-theme="b">
             <a data-role="button" href="#list" data-icon="home" data-transition="turn" data-corners="false">Home</a>
             <h1>
-                <img src="img/logo.png" alt="i-rate mobile" width="30" height="30"
-                    style="padding-right: 0.5em; vertical-align: middle;" />
                 Review
             </h1>
         </div>
 
         <div data-role="content">
             <form id="reviewForm">
-                <fieldset>
-                    <label for="photo">Take a picture(optional):</label>
-                    <div id="takepicture" class="ui-btn ui-icon-camera ui-btn-icon-left ui-shadow ui-corner-all">Take
-                        Picture</div>
-                    <img style="width:80%;height:200px; margin: auto" id="image" src="img/default-image.png" />
+
+                <fieldset data-role="fieldcontain" class="ui-hide-label">
+                    <label for="reviewerName">Reviewer Name:</label>
+                    <input type="text" name="reviewerName" id="reviewerName" placeholder="Your Name" />
                 </fieldset>
-                <fieldset data-role="fieldcontain">
+
+                <fieldset data-role="fieldcontain" class="ui-hide-label">
                     <label for="restaurantName">Restaurant Name:</label>
                     <input type="text" name="restaurantName" id="restaurantName" placeholder="Restaurant name" />
                 </fieldset>
@@ -83,59 +77,38 @@
                 <fieldset data-role="fieldcontain">
                     <label for="restaurantType" class="select">Restaurant Type:</label>
                     <select name="restaurantType" id="restaurantType" data-mini="true">
+                        <option  value="default" selected>Types:</option>
                         <option value="fastfood">Fast food</option>
                         <option value="grill">Grill</option>
                         <option value="seafood">Sea Food</option>
                     </select>
                 </fieldset>
 
-                <fieldset data-role="fieldcontain" class="ui-grid-c">
-                    <div class="ui-block-a" style="width: 40%">
-                        <label for="visitTime">Visit Time:</label>
-                        <input type="time" name="visitTime" id="visitTime" />
-                    </div>
-
-                    <div class="ui-block-b" style="width: 20%">
-
-                    </div>
-
-                    <div class="ui-block-c" style="width: 40%">
-                        <label for="visitDate">Visit Date:</label>
-                        <input type="date" name="visitDate" id="visitDate" />
-                    </div>
+                <fieldset data-role="fieldcontain">
+                    <label for="visitTime">Visit Time:</label>
+                    <input type="time" name="visitTime" id="visitTime" />
                 </fieldset>
 
                 <fieldset data-role="fieldcontain">
-                    <label for="prices">Price:</label>
+                    <label for="visitDate">Visit Date:</label>
+                    <input type="date" name="visitDate" id="visitDate" />
+                </fieldset>
 
-                    <!-- Rating Stars Box -->
-                    <div class='rating-stars text-center'>
-                        <ul id='prices'>
-                            <li class='star' title='Poor' data-value='1'>
-                                <i class='fa fa-dollar-sign fa-fw'></i>
-                            </li>
-                            <li class='star' title='Fair' data-value='2'>
-                                <i class='fa fa-dollar-sign fa-fw'></i>
-                            </li>
-                            <li class='star' title='Good' data-value='3'>
-                                <i class='fa fa-dollar-sign fa-fw'></i>
-                            </li>
-                            <li class='star' title='Excellent' data-value='4'>
-                                <i class='fa fa-dollar-sign fa-fw'></i>
-                            </li>
-                            <li class='star' title='WOW!!!' data-value='5'>
-                                <i class='fa fa-dollar-sign fa-fw'></i>
-                            </li>
-                        </ul>
-                    </div>
-                    <input data-role="none" type="text" id="hiddenPrice" name="hiddenPrice" value="0"
-                        style="display: none;">
-
+                <fieldset data-role="fieldcontain">
+                    <label for="restaurantPrice">Price:</label>
+                    <select name="restaurantPrice" id="restaurantPrice" data-mini="true">
+                        <option  value="default" selected>Price:</option>
+                        <option value="fastfood">Low</option>
+                        <option value="grill">Average</option>
+                        <option value="seafood">High</option>
+                    </select>
+                   
                 </fieldset>
 
                 <fieldset data-role="fieldcontain">
                     <label for="restaurantService">Restaurant Service: </label>
                     <select name="restaurantService" id="restaurantService" data-mini="true">
+                        <option  value="default" selected>Rating: </option>
                         <option value="improve">Need to improve</option>
                         <option value="okay">OKAY</option>
                         <option value="good">Good</option>
@@ -146,6 +119,7 @@
                 <fieldset data-role="fieldcontain">
                     <label for="restaurantClean">Restaurant Cleanliness: </label>
                     <select name="restaurantClean" id="restaurantClean" data-mini="true">
+                        <option  value="default" selected>Rating: </option>
                         <option value="improve">Need to improve</option>
                         <option value="okay">OKAY</option>
                         <option value="good">Good</option>
@@ -156,6 +130,7 @@
                 <fieldset data-role="fieldcontain">
                     <label for="foodQuality">Food Quality: </label>
                     <select name="foodQuality" id="foodQuality" data-mini="true">
+                        <option  value="default" selected>Rating: </option>
                         <option value="improve">Need to improve</option>
                         <option value="okay">OKAY</option>
                         <option value="good">Good</option>
@@ -164,13 +139,14 @@
                 </fieldset>
 
                 <fieldset data-role="fieldcontain">
-                    <label for="note">Add note(optional):</label>
-                    <textarea name="note" id="rnote" cols="30" rows="10"></textarea>
+                    <textarea name="note" id="rnote" cols="30" rows="10" placeholder="What is your thought?(optional)"></textarea>
                 </fieldset>
 
-                <fieldset data-role="fieldcontain">
-                    <label for="reviewerName">Reviewer Name:</label>
-                    <input type="text" name="reviewerName" id="reviewerName" placeholder="Your Name" />
+                <fieldset>
+                    <label for="photo">Take a picture(optional):</label>
+                    <div id="takepicture" class="ui-btn ui-icon-camera ui-btn-icon-left ui-shadow ui-corner-all">Take
+                        Picture</div>
+                    <img style="width:80%;height:200px; margin-left: 30px" id="image" src="img/default-image.png" />
                 </fieldset>
 
                 <input style="width: 200px; margin: 20px auto;" class="ui-btn ui-shadow ui-corner-all" type="submit"
@@ -188,26 +164,25 @@
             <a data-role="button" href="#list" data-icon="home" data-transition="slide" data-direction="reverse"
                 data-corners="false" data-iconpos="notext">Home</a>
             <h1>
-                Restaurant Info
+                Restaurant Details
             </h1>
         </div>
 
         <div data-role="content">
-            <img id="ta-info-image" src="img/restaurant1.png" class="info-img-cover">
+            <img id="ta-info-image" src="img/res1.png" class="info-img-cover">
 
             <div data-role="fieldcontain" class="ui-grid-c">
-                <div class="ui-block-a" style ="width: 33%">
-                    <a data-role="button" href="#addnote" data-rel="popup" data-position-to="window" data-transition="pop"
-                    data-icon="edit">Add Note</a>
+                <div class="ui-block-a" style="width: 33%">
+                    <a class="ui-btn ui-btn-inline ui-icon-edit ui-btn-icon-top" href="#addnote" data-rel="popup" data-position-to="window"
+                        data-transition="pop">Write Note</a>
                 </div>
-                <div class="ui-block-b" style ="width: 33%">
-                               <a data-role="button" href="#edit-res" data-rel="popup"
-                class="ui-btn ui-shadow ui-corner-all ui-icon-edit ui-btn-icon-notext">Edit</a>
+                <div class="ui-block-b" style="width: 33%">
+                    <a href="#edit-res" data-rel="popup"
+                        class="ui-btn ui-shadow ui-corner-all ui-icon-edit ui-btn-icon-top">Edit This</a>
                 </div>
-                <div class="ui-block-c" style ="width: 33%">
-                    <a data-role="button" href="#deleteres" data-rel="popup" data-position-to="window" data-icon="delete"
-                    data-theme="b" data-transition="pop">Delete
-                    Restaurant</a>
+                <div class="ui-block-c" style="width: 33%">
+                    <a class="ui-btn ui-btn-inline ui-icon-delete ui-btn-icon-top" href="#deleteres" data-rel="popup" data-position-to="window"
+                        data-icon="delete" data-transition="pop">Delete This</a>
                 </div>
             </div>
 
@@ -226,6 +201,7 @@
                         <fieldset data-role="fieldcontain">
                             <label for="edit-rtype" class="select">Restaurant Type:</label>
                             <select name="rtype" id="edit-rtype" data-mini="true">
+                                <option  value="default" selected>Type:</option>
                                 <option value="fastfood">Fast food</option>
                                 <option value="grill">Grill</option>
                                 <option value="seafood">Sea Food</option>
@@ -250,35 +226,20 @@
 
                         <fieldset data-role="fieldcontain">
                             <label for="edit-prices">Price:</label>
-
-                            <!-- Rating Stars Box -->
-                            <div class='rating-stars text-center'>
-                                <ul id='edit-prices'>
-                                    <li class='star' title='Poor' data-value='1'>
-                                        <i class='fa fa-dollar-sign fa-fw'></i>
-                                    </li>
-                                    <li class='star' title='Fair' data-value='2'>
-                                        <i class='fa fa-dollar-sign fa-fw'></i>
-                                    </li>
-                                    <li class='star' title='Good' data-value='3'>
-                                        <i class='fa fa-dollar-sign fa-fw'></i>
-                                    </li>
-                                    <li class='star' title='Excellent' data-value='4'>
-                                        <i class='fa fa-dollar-sign fa-fw'></i>
-                                    </li>
-                                    <li class='star' title='WOW!!!' data-value='5'>
-                                        <i class='fa fa-dollar-sign fa-fw'></i>
-                                    </li>
-                                </ul>
-                            </div>
-                            <input data-role="none" type="text" id="editHiddenPrice" name="editHiddenPrice" value="0"
-                                style="display: none;">
+                            <select name="rprice" id="restaurantPrice" data-mini="true">
+                                <option  value="default" selected>Price:</option>
+                                <option value="fastfood">Low</option>
+                                <option value="grill">Average</option>
+                                <option value="seafood">High</option>
+                            </select>
+                            
 
                         </fieldset>
 
                         <fieldset data-role="fieldcontain">
                             <label for="edit-service">Service Rating: </label>
                             <select name="rservice" id="edit-rservice" data-mini="true">
+                                <option  value="default" selected>Service:</option>
                                 <option value="improve">Need to improve</option>
                                 <option value="okay">OKAY</option>
                                 <option value="good">Good</option>
@@ -289,6 +250,7 @@
                         <fieldset data-role="fieldcontain">
                             <label for="edit-clearnliness">Cleanliness Rating: </label>
                             <select name="rcleanliness" id="edit-rcleanliness" data-mini="true">
+                                <option  value="default" selected>Cleanliness:</option>
                                 <option value="improve">Need to improve</option>
                                 <option value="okay">OKAY</option>
                                 <option value="good">Good</option>
@@ -299,6 +261,7 @@
                         <fieldset data-role="fieldcontain">
                             <label for="edit-quality">Food quality Rating: </label>
                             <select name="rquality" id="edit-rquality" data-mini="true">
+                                <option  value="default" selected>Food Quality:</option>
                                 <option value="improve">Need to improve</option>
                                 <option value="okay">OKAY</option>
                                 <option value="good">Good</option>
@@ -327,35 +290,35 @@
             </div>
             <div class="tablerow">
                 <div class="left-table">Name:</div>
-                <div class="right-table ta-info-res-name"></div>
+                <div class="right-table infoResName"></div>
             </div>
 
             <div class="tablerow">
                 <div class="left-table">Type:</div>
-                <div class="right-table ta-info-res-type"></div>
+                <div class="right-table infoResType"></div>
             </div>
 
             <div class="tablerow">
                 <div class="left-table">Day Visit:</div>
-                <div class="right-table ta-info-res-visit">9PM 14-11-2020</div>
+                <div class="right-table infoResVisit">9PM 14-11-2020</div>
             </div>
 
             <div class="tablerow">
                 <div class="left-table">Price:</div>
-                <div class="right-table ta-info-res-price"><i class='fa fa-dollar-sign fa-fw'
-                        style="color: #0ed41f">5</i></div>
+                <div class="right-table "><i class='fa fa-dollar-sign fa-fw infoResPrice'
+                        style="color: #0ed41f">Low</i></div>
             </div>
 
             <div class="tablerow">
                 <div class="left-table">Rating:</div>
-                <div class="right-table"><i class='fas fa-star ta-info-res-rating'></i></div>
+                <div class="right-table"><i class='fas fa-star infoResRating'></i></div>
             </div>
 
             <div data-role="collapsible">
                 <h3>Notes</h3>
                 <div id="ta-note-list">
                     <label for="user1">User1</label>
-                    <textarea name="user1" id="user1" cols="20" rows="5" readonly>
+                    <textarea name="user1" id="user1" cols="40" rows="5" readonly>
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
                         aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
                         aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
@@ -398,7 +361,7 @@
                 </div>
 
             </div>
-    
+
             <div data-role="popup" id="deleteres" data-overlay-theme="b" data-theme="b" data-dismissible="false"
                 style="max-width:400px;">
                 <div data-role="header" data-theme="a">

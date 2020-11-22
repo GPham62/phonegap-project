@@ -1,7 +1,6 @@
 {
   "devDependencies": {
     "cordova": "^10.0.0",
-    "cordova-android": "^9.0.0",
     "cordova-plugin-battery-status": "~1.2.4",
     "cordova-plugin-camera": "~2.4.1",
     "cordova-plugin-device": "~1.1.6",
@@ -28,11 +27,7 @@
       "cordova-plugin-network-information": {},
       "cordova-plugin-vibration": {}
     },
-    "platforms": [
-      "android"
-    ]
+    "platforms": []
   },
-  "dependencies": {
-    "cordova-browser": "^6.0.0"
-  }
+  "dependencies": {}
 }

@@ -1,19 +1,19 @@
 function populateDB(tx) {
     //create restaurants table
     tx.executeSql('DROP TABLE IF EXISTS restaurants');
-    tx.executeSql('CREATE TABLE IF NOT EXISTS restaurants (res_id integer primary key not null, res_name text not null, type text, price integer, service text, cleanliness text, quality text, visited_time text, imageURI text)');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS restaurants (res_id integer primary key not null, res_name text not null, type text, price text, service text, cleanliness text, quality text, visited_time text, imageURI text)');
     //insert restaurant
-    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("res1", "type1", 1, "okay", "okay","okay", "9PM 4/10/99", "img/restaurant1.png")');
-    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("res2", "type2", 2, "good", "good","excellent", "9PM 4/10/99", "img/restaurant1.png")');
-    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("res3", "type3", 3, "good", "good","excellent", "9PM 4/10/99", "img/restaurant1.png")');
+    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("Via Spohia", "Grill", "low", "okay", "okay","okay", "6PM 1/2/2020", "img/res1.png")');
+    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("Pinky Cafe", "Sea Food", "average", "good", "good","excellent", "6PM 2/3/2020", "img/res2.png")');
+    tx.executeSql('insert into restaurants(res_name, type, price, service, cleanliness, quality, visited_time, imageURI) values ("Dorechester", "Grill", "high", "good", "good","excellent", "6PM 3/4/2020", "img/res3.png")');
     //create note table
     tx.executeSql('DROP TABLE IF EXISTS notes');
     tx.executeSql('CREATE TABLE IF NOT EXISTS notes (note_id integer primary key not null,content text not null,user_name text not null, res_id integer not null, foreign key (res_id) references restaurants (res_id) on update cascade on delete cascade)');
     //insert note
-    tx.executeSql('insert into notes(content, user_name, res_id) values ("excellent food", "thao1", 1)')
-    tx.executeSql('insert into notes(content, user_name, res_id) values ("good food", "thao2", 2)')
-    tx.executeSql('insert into notes(content, user_name, res_id) values ("bad food", "thao3", 1)')
-    tx.executeSql('insert into notes(content, user_name, res_id) values ("excellent food 2", "thao3", 2)')
+    tx.executeSql('insert into notes(content, user_name, res_id) values ("Lorem ipsum dolor sit amet", "Pham", 1)')
+    tx.executeSql('insert into notes(content, user_name, res_id) values ("Lorem ipsum dolor sit amet", "Minh", 2)')
+    tx.executeSql('insert into notes(content, user_name, res_id) values ("Lorem ipsum dolor sit amet", "Huy", 1)')
+    tx.executeSql('insert into notes(content, user_name, res_id) values ("Lorem ipsum dolor sit amet", "Linh", 2)')
 }
 function errorCB(tx, err) {
     alert("Error processing SQL: " + err);
@@ -21,34 +21,34 @@ function errorCB(tx, err) {
 function successCB() {
 
 }
-//sửa tên hàm, tên biến
+
 function loadAllRestaurants(tx) {
     tx.executeSql('select * from restaurants', [], function (t, rs) {
         let restaurantNum = rs.rows.length;
         let resArray = []
 
-        //đổi forEach
+        
         for (let i = 0; i < restaurantNum; i++) {
             let { res_id, res_name, service, quality, cleanliness, imageURI } = rs.rows.item(i);
             let rating = calculateRating({ service: toNumRating(service), cleanliness: toNumRating(cleanliness), quality: toNumRating(quality) })
             resArray.push(rs.rows.item(i))
 
-            //không gọi hàm tự viết ra
+            
             appendNewRes(res_id, res_name, imageURI)
         }
 
-        //đổi restaurantList
+        
         $("#restaurantList").listview('refresh')
 
-        //đổi showResDetails
+        
         $(".showResDetails").on('click', function (e) {
             let res_id = $(this).attr('res-id')
-            //đổi resId thành res_id
+            
             $.mobile.changePage('#resDetails', { dataUrl: `/#resDetails?resId=${res_id}` });
         })
     })
 }
-//sửa hết: tên biến, tên hàm, switch
+
 function toNumRating(stringRating) {
     if (stringRating == "improve") {
         return 1;
@@ -60,7 +60,7 @@ function toNumRating(stringRating) {
         return 4;
     }
 }
-//sửa hết: tên biến, tên hàm, truyền param, viết dài ra, đổi round thành cái khác 
+
 function calculateRating({ service, cleanliness, quality }) {
     return Math.round((service + cleanliness + quality) / 3);
 }
@@ -68,6 +68,7 @@ function takePhoto() {
     navigator.camera.getPicture(onCameraSuccess, onCameraError, {
         quality: 50,
         destinationType: Camera.DestinationType.FILE_URI,
+        correctOrientation: true
     })
 }
 function onCameraSuccess(imageURI) {
@@ -80,7 +81,7 @@ function onCameraError(message) {
 function appendNewNote(note_id, user_name, content) {
     $("#ta-note-list").append(
         `<label for="user1">${user_name}</label>` +
-        `<textarea name="user1" id=${note_id} cols="20" rows="5" readonly>${content}</textarea>`
+        `<textarea name="user1" id=${note_id} cols="40" rows="5" readonly>${content}</textarea>`
     )
 }
 function appendNewRes(res_id, res_name, imageURI) {
@@ -127,11 +128,11 @@ $(document).ready(function () {
                         let { price, quality, res_name, service, cleanliness, type, visited_time, imageURI } = rs.rows.item(i)
                         let rating = calculateRating({ service: toNumRating(service), cleanliness: toNumRating(cleanliness), quality: toNumRating(quality) })
                         $("#ta-info-image").attr("src", imageURI)
-                        $('.ta-info-res-name').text(res_name)
-                        $('.ta-info-res-type').text(type)
-                        $('.ta-info-res-price').text(`${price}/5`)
-                        $('.ta-info-res-rating').text(rating)
-                        $('.ta-info-res-visit').text(visited_time)
+                        $('.infoResName').text(res_name)
+                        $('.infoResType').text(type)
+                        $('.infoResPrice').text(`${price}`)
+                        $('.infoResRating').text(rating)
+                        $('.infoResVisit').text(visited_time)
                         $('#hiddenResId').val(res_id)
                     }
                     let { note_id, content, user_name } = rs.rows.item(i)
@@ -148,7 +149,6 @@ $(document).ready(function () {
     })
 
     $("#ta-noteForm").validate({
-        ignore: [],
         rules:
         {
             user_name: {
@@ -184,86 +184,10 @@ $(document).ready(function () {
         }
     });
 
-    //star rating jquery
-    /* 1. Visualizing things on Hover - See next part for action on click */
-    $('#prices li').on('mouseover', function () {
-        var onPrice = parseInt($(this).data('value'), 10); // The star currently mouse on
-
-        // Now highlight all the stars that's not after the current hovered star
-        $(this).parent().children('li.star').each(function (e) {
-            if (e < onPrice) {
-                $(this).addClass('hover');
-            }
-            else {
-                $(this).removeClass('hover');
-            }
-        });
-
-    }).on('mouseout', function () {
-        $(this).parent().children('li.star').each(function (e) {
-            $(this).removeClass('hover');
-        });
-    });
-
-
-    /* 2. Action to perform on click */
-    $('#prices li').on('click', function () {
-        var onPrice = parseInt($(this).data('value'), 10); // The star currently selected
-        var prices = $(this).parent().children('li.star');
-
-        for (i = 0; i < prices.length; i++) {
-            $(prices[i]).removeClass('selected');
-        }
-
-        for (i = 0; i < onPrice; i++) {
-            $(prices[i]).addClass('selected');
-        }
-        var ratingValue = parseInt($('#prices li.selected').last().data('value'), 10);
-
-        $("#hiddenPrice").attr('value', ratingValue);
-    });
-
     //validator
-    $.validator.addMethod("notnull", function (value, element) {
-        var val = element.attributes["value"]["value"];
-        return this.optional(element) || val > 0;
-    }, "Price is required!");
-
-
-    $('#edit-prices li').on('mouseover', function () {
-        var onPrice = parseInt($(this).data('value'), 10); // The star currently mouse on
-
-        // Now highlight all the stars that's not after the current hovered star
-        $(this).parent().children('li.star').each(function (e) {
-            if (e < onPrice) {
-                $(this).addClass('hover');
-            }
-            else {
-                $(this).removeClass('hover');
-            }
-        });
-
-    }).on('mouseout', function () {
-        $(this).parent().children('li.star').each(function (e) {
-            $(this).removeClass('hover');
-        });
-    });
-
-    $('#edit-prices li').on('click', function () {
-        var onPrice = parseInt($(this).data('value'), 10);
-        var prices = $(this).parent().children('li.star');
-
-        for (i = 0; i < prices.length; i++) {
-            $(prices[i]).removeClass('selected');
-        }
-
-        for (i = 0; i < onPrice; i++) {
-            $(prices[i]).addClass('selected');
-        }
-        var ratingValue = parseInt($('#edit-prices li.selected').last().data('value'), 10);
-
-        $("#editHiddenPrice").attr('value', ratingValue);
-    });
+    $.validator.addMethod("valueNotEquals", function (value, element, arg) {
+        return arg !== value;
+    }, "Value must not equal arg!");
 
     $("#delResBtn").on("click", function () {
         let res_id = $("#hiddenResId").val()
@@ -274,9 +198,8 @@ $(document).ready(function () {
         }, errorCB, successCB)
     })
 
-    //sửa toàn bộ
+    
     $("#reviewForm").validate({
-        ignore: [],
         rules:
         {
             reviewerName: {
@@ -291,9 +214,21 @@ $(document).ready(function () {
             visitDate: {
                 required: true
             },
-            hiddenPrice: {
-                notnull: true
+            restaurantPrice: {
+                valueNotEquals: "default"
             },
+            restaurantType: {
+                valueNotEquals: "default"
+            },
+            restaurantService: {
+                valueNotEquals: "default"
+            },
+            restaurantClean: {
+                valueNotEquals: "default"
+            },
+            foodQuality: {
+                valueNotEquals: "default"
+            }
         },
         messages: {
             reviewerName: {
@@ -307,6 +242,21 @@ $(document).ready(function () {
             },
             visitDate: {
                 required: "Visit date required!",
+            },
+            restaurantPrice: {
+                valueNotEquals: "Price is required!",
+            },
+            restaurantType: {
+                valueNotEquals: "Type is required!"
+            },
+            restaurantService: {
+                valueNotEquals: "Service rating is required!"
+            },
+            restaurantClean: {
+                valueNotEquals: "Service rating is required!"
+            },
+            foodQuality: {
+                valueNotEquals: "Service rating is required!"
             }
         },
         errorPlacement: function (err, element) {
@@ -322,7 +272,7 @@ $(document).ready(function () {
             var foodQuality = $('#reviewForm select[name="foodQuality"]').val();
             var visitTime = $('#reviewForm input[name="visitTime"]').val();
             var visitDate = $('#reviewForm input[name="visitDate"]').val();
-            var price = parseInt($('#prices li.selected').last().data('value'), 10);
+            var price = $('#reviewForm select[name="restaurantPrice"]').val();
             var note = $('textarea#rnote').val();
             var imageURI = $("#image").attr('src')
 
@@ -371,37 +321,63 @@ $(document).ready(function () {
     });
 
     $("#ta-editForm").validate({
-        ignore: [],
         rules:
         {
-            uname: {
+            reviewerName: {
                 required: true
             },
-            rname: {
+            restaurantName: {
                 required: true
             },
-            time: {
+            visitTime: {
                 required: true
             },
-            date: {
+            visitDate: {
                 required: true
             },
-            editHiddenPrice: {
-                notnull: true
+            restaurantPrice: {
+                valueNotEquals: "default"
             },
+            restaurantType: {
+                valueNotEquals: "default"
+            },
+            restaurantService: {
+                valueNotEquals: "default"
+            },
+            restaurantClean: {
+                valueNotEquals: "default"
+            },
+            foodQuality: {
+                valueNotEquals: "default"
+            }
         },
         messages: {
-            uname: {
-                required: "Reviewer name is required!",
+            reviewerName: {
+                required: "Your name required!",
             },
-            rname: {
-                required: "Restaurant name is required!",
+            restaurantName: {
+                required: "Restaurant name required!",
             },
-            time: {
-                required: "Time is required!",
+            visitTime: {
+                required: "Visit time required!",
             },
-            date: {
-                required: "Date is required!",
+            visitDate: {
+                required: "Visit date required!",
+            },
+            restaurantPrice: {
+                valueNotEquals: "Price is required!",
+            },
+            restaurantType: {
+                valueNotEquals: "Type is required!"
+            },
+            restaurantService: {
+                valueNotEquals: "Service rating is required!"
+            },
+            restaurantClean: {
+                valueNotEquals: "Service rating is required!"
+            },
+            foodQuality: {
+                valueNotEquals: "Service rating is required!"
             }
         },
         errorPlacement: function (err, element) {
@@ -415,7 +391,7 @@ $(document).ready(function () {
             var rquality = $('#ta-editForm select[name="rquality"]').val();
             var time = $('#ta-editForm input[name="time"]').val();
             var date = $('#ta-editForm input[name="date"]').val();
-            var price = parseInt($('#edit-prices li.selected').last().data('value'), 10);
+            var rprice = $('#ta-editForm select[name="rprice"]').val();
             var res_id = $('#hiddenResId').val()
 
             db.transaction(function (tx) {
@@ -427,11 +403,11 @@ $(document).ready(function () {
                         .prop('selected', false);
                     $("#ta-editForm-close").trigger("click");
 
-                    $('.ta-info-res-name').text(rname)
-                    $('.ta-info-res-type').text(rtype)
-                    $('.ta-info-res-price').text(`${price}/5`)
-                    $('.ta-info-res-rating').text(calculateRating({ service: toNumRating(rservice), cleanliness: toNumRating(rcleanliness), quality: toNumRating(rquality) }))
-                    $('.ta-info-res-visit').text(`${time + " " + date}`)
+                    $('.infoResName').text(rname)
+                    $('.infoResType').text(rtype)
+                    $('.infoResPrice').text(`${price}`)
+                    $('.infoResRating').text(calculateRating({ service: toNumRating(rservice), cleanliness: toNumRating(rcleanliness), quality: toNumRating(rquality) }))
+                    $('.infoResVisit').text(`${time + " " + date}`)
 
                     $("#restaurantList").empty();
                     db.transaction(loadAllRestaurants, errorCB, successCB)
